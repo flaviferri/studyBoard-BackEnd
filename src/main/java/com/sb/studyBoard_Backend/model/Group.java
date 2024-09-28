@@ -3,8 +3,6 @@ package com.sb.studyBoard_Backend.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.catalina.User;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,9 +31,12 @@ public class Group extends BaseEntity {
     private String groupName;
 
     @ManyToOne
-    @JoinColumn(updatable = false, name = "created_by")
-    private User createdBy;
+    @JoinColumn(updatable = false, name = "created_by", nullable = false)
+    private UserEntity createdBy;
 
     @OneToMany(mappedBy = "group")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
+
+    // @OneToMany(mappedBy = "group")
+    // private Set<Board> boards = new HashSet<>();
 }
