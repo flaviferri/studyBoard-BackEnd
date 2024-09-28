@@ -1,9 +1,6 @@
 package com.sb.studyBoard_Backend.model;
 
-import java.util.Date;
-
 import org.apache.catalina.User;
-import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +20,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "boards")
-public class Board {
+public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +36,4 @@ public class Board {
 
     @JoinColumn(updatable = false, name = "created_by")
     private User createdBy;
-
-    @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
-    private Date createdAt;
-
 }

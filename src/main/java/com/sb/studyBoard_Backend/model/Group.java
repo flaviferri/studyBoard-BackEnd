@@ -1,11 +1,9 @@
 package com.sb.studyBoard_Backend.model;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.catalina.User;
-import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "groups")
-public class Group {
+public class Group extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +31,6 @@ public class Group {
 
     @Column(nullable = false)
     private String groupName;
-
-    @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
-    private Date createdAt;
 
     @ManyToOne
     @JoinColumn(updatable = false, name = "created_by")

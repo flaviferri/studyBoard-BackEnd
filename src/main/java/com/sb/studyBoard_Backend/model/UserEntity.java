@@ -1,11 +1,8 @@
 package com.sb.studyBoard_Backend.model;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,18 +35,17 @@ public class UserEntity {
     @Column(nullable = true, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = true, unique = true)
+    private String githubId;
+
+    @Column(nullable = true)
     private String password;
 
-    @Column(nullable = false)
-    private String avatar;
+    @Column
+    private String avatarUrl;
 
     @Column(nullable = false)
     private boolean enabled;
-
-    @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
-    private Date createdAt;
 
     @OneToMany(mappedBy = "user")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
