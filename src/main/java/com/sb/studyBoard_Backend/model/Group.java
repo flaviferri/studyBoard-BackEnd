@@ -37,6 +37,6 @@ public class Group extends BaseEntity {
     @OneToMany(mappedBy = "group")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
-    // @OneToMany(mappedBy = "group")
-    // private Set<Board> boards = new HashSet<>();
+    @OneToMany(mappedBy = "group")
+    private Set<Board> boards = new HashSet<>();
 }
