@@ -6,11 +6,10 @@ import org.apache.catalina.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,22 +22,20 @@ import lombok.Setter;
 @Table(name = "user_group_roles")
 public class UserGroupRole {
 
-    @EmbeddedId
-    private UserGroupRoleKey id;
+    @Id
+    @Column(name = "user_id")
+    private Long userId;
 
     @ManyToOne
-    @MapsId("userId")
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
     @ManyToOne
-    @MapsId("groupId")
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "group_id", insertable = false, updatable = false)
     private Group group;
 
     @ManyToOne
-    @MapsId("roleId")
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private Role role;
 
     @CreationTimestamp

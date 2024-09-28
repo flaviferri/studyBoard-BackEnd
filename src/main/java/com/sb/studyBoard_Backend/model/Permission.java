@@ -17,20 +17,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "privileges")
-public class Privilege {
+@Table(name = "permissions")
+public class Permission {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "privileges")
+    @ManyToMany(mappedBy = "permissions")
     private Collection<Role> roles;
 
-    public Privilege(String name) {
+    public Permission(String name) {
         this.name = name;
     }
 }
