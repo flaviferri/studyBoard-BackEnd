@@ -16,7 +16,6 @@ public class UserService {
 
     public UserEntity saveOrUpdateUser(Map<String, Object> userAttributes) {
         String githubId = userAttributes.get("id").toString();
-        String login = (String) userAttributes.get("login");
         String name = (String) userAttributes.get("name");
         String email = (String) userAttributes.get("email");
         String avatarUrl = (String) userAttributes.get("avatar_url");
@@ -28,7 +27,6 @@ public class UserService {
         } else {
             UserEntity user = new UserEntity();
             user.setGithubId(githubId);
-            user.setLogin(login);
             user.setName(name);
             user.setEmail(email);
             user.setAvatarUrl(avatarUrl);
