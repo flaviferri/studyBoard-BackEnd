@@ -13,6 +13,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import jakarta.persistence.JoinColumn;
 @Setter
 @NoArgsConstructor
 @Table(name = "roles")
+@Builder
 public class Role {
 
     @Id
@@ -41,5 +43,11 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
+
+    @Builder
+    public Role(String name, Collection<Permission> permissions) {
+        this.name = name;
+        this.permissions = permissions;
+    }
 
 }
