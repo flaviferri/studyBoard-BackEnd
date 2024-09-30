@@ -11,7 +11,6 @@ import com.sb.studyBoard_Backend.dto.UserDTO;
 import com.sb.studyBoard_Backend.exceptions.EmailExistsException;
 import com.sb.studyBoard_Backend.model.Role;
 import com.sb.studyBoard_Backend.model.UserEntity;
-import com.sb.studyBoard_Backend.repository.IUserService;
 import com.sb.studyBoard_Backend.repository.RoleRepository;
 import com.sb.studyBoard_Backend.repository.UserRepository;
 
