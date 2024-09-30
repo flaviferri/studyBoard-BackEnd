@@ -2,6 +2,7 @@ package com.sb.studyBoard_Backend.service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -39,7 +40,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Override
     @Transactional
     public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
-
         if (alreadySetup)
             return;
 
@@ -53,18 +53,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Permission deleteGroup = createPermissionIfNotFound("DELETE_GROUP");
         Permission updateGroup = createPermissionIfNotFound("UPDATE_GROUP");
 
-        Role adminRole = createRoleIfNotFound("ROLE_ADMIN", Arrays.asList(
-                readPostit, writePostit, deletePostit, updatePostit,
-                adminPermission, readGroup, createGroup, deleteGroup, updateGroup));
+        List<Permission> adminPermissions = Arrays.asList(readPostit, writePostit, deletePostit, updatePostit,
+                adminPermission, readGroup, createGroup, deleteGroup, updateGroup);
+        Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPermissions);
 
-        // Role userRole = createRoleIfNotFound("ROLE_USER", Arrays.asList(
-        // readPostit, writePostit, deletePostit, updatePostit, readGroup));
-
-        // Role creatorRole = createRoleIfNotFound("ROLE_CREATOR", Arrays.asList(
-        // readPostit, writePostit, deletePostit, updatePostit,
-        // readGroup, createGroup, deleteGroup, updateGroup));
-
-        UserEntity adminUser = UserEntity.builder()
+        UserEntity user = UserEntity.builder()
                 .name("TestAdmin")
                 .password(passwordEncoder.encode("test"))
                 .email("testadmin@test.com")
@@ -73,30 +66,29 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 .build();
 
         System.out.println("Creando usuario administrador...");
-        userRepository.save(adminUser);
-        System.out.println("Usuario administrador creado.");
+        userRepository.save(user);
+        System.out.println("Usuario administrador creado con éxito.");
 
         alreadySetup = true;
     }
 
     @Transactional
     Permission createPermissionIfNotFound(String name) {
-        return permissionRepository.findByName(name).orElseGet(() -> {
-            Permission permission = Permission.builder()
-                    .name(name)
-                    .build();
-            return permissionRepository.save(permission);
-        });
+        return permissionRepository.findByName(name)
+                .orElseGet(() -> {
+                    Permission permission = new Permission(name);
+                    permissionRepository.save(permission);
+                    return permission;
+                });
     }
 
     @Transactional
     Role createRoleIfNotFound(String name, Collection<Permission> permissions) {
-        return roleRepository.findByName(name).orElseGet(() -> {
-            Role role = Role.builder()
-                    .name(name)
-                    .permissions(permissions)
-                    .build();
-            return roleRepository.save(role);
-        });
+        return roleRepository.findByName(name)
+                .orElseGet(() -> {
+                    Role role = new Role(name, permissions);
+                    roleRepository.save(role);
+                    return role;
+                });
     }
 }

@@ -44,6 +44,10 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
+    public Role(String name) {
+        this.name = name;
+    }
+
     @Builder
     public Role(String name, Collection<Permission> permissions) {
         this.name = name;
