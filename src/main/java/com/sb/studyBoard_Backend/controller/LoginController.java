@@ -1,6 +1,7 @@
 package com.sb.studyBoard_Backend.controller;
 
 
+
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.service.JwtService;
 import com.sb.studyBoard_Backend.service.UserService;
@@ -23,8 +24,8 @@ public class LoginController {
     @Autowired
     private JwtService jwtService;
 
-   @Autowired
-   private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -61,7 +62,7 @@ public class LoginController {
 
         Map<String, String> body = new HashMap<>();
         body.put("client_id", clientId);
-        body.put("client_secret", clientSecret);
+        body.put("client_secret",  clientSecret);
         body.put("code", code);
 
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(body, headers);
