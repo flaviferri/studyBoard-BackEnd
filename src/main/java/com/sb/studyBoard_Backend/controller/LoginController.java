@@ -1,15 +1,13 @@
 package com.sb.studyBoard_Backend.controller;
 
 
-import com.sb.studyBoard_Backend.model.User;
+import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.service.JwtService;
 import com.sb.studyBoard_Backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,7 +47,7 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Unable to fetch user details"));
         }
 
-        User savedUser = userService.saveOrUpdateUser(userAttributes);
+        UserEntity savedUser = userService.saveOrUpdateUser(userAttributes);
         String token = jwtService.generateToken(savedUser);
 
         return ResponseEntity.ok(Map.of("token", token, "user", savedUser));
@@ -103,19 +101,6 @@ public class LoginController {
         }
     }
 
-//    @CrossOrigin(origins = "http://localhost:4001/")
-//    @GetMapping("/login/success")
-//    public ResponseEntity<Map<String, Object>> loginSuccess(@AuthenticationPrincipal OAuth2User user) {
-//        if (user == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "User not authenticated"));
-//        }
-//
-//        Map<String, Object> userAttributes = user.getAttributes();
-//        User savedUser = userService.saveOrUpdateUser(userAttributes);
-//        String token = jwtService.generateToken(savedUser);
-//
-//        return ResponseEntity.ok(Map.of("token", token, "user", savedUser));
-//    }
 
     @CrossOrigin(origins = "http://localhost:4001")
     @GetMapping("/home")

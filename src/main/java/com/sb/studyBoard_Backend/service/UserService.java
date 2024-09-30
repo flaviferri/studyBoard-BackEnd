@@ -1,6 +1,6 @@
 package com.sb.studyBoard_Backend.service;
 
-import com.sb.studyBoard_Backend.model.User;
+import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,19 +14,19 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User saveOrUpdateUser(Map<String, Object> userAttributes) {
+    public UserEntity saveOrUpdateUser(Map<String, Object> userAttributes) {
         String githubId = userAttributes.get("id").toString();
         String login = (String) userAttributes.get("login");
         String name = (String) userAttributes.get("name");
         String email = (String) userAttributes.get("email");
         String avatarUrl = (String) userAttributes.get("avatar_url");
 
-        Optional<User> existingUser = userRepository.findByGithubId(githubId);
+        Optional<UserEntity> existingUser = userRepository.findByGithubId(githubId);
 
         if (existingUser.isPresent()) {
             return existingUser.get();
         } else {
-            User user = new User();
+            UserEntity user = new UserEntity();
             user.setGithubId(githubId);
             user.setLogin(login);
             user.setName(name);
