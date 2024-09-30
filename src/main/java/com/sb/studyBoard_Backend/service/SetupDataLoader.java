@@ -57,17 +57,21 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 adminPermission, readGroup, createGroup, deleteGroup, updateGroup);
         Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPermissions);
 
-        UserEntity user = UserEntity.builder()
-                .name("TestAdmin")
-                .password(passwordEncoder.encode("test"))
-                .email("testadmin@test.com")
-                .roles(Arrays.asList(adminRole))
-                .enabled(true)
-                .build();
+        createRoleIfNotFound("ROLE_USER", Arrays.asList(readPostit, writePostit));
 
-        System.out.println("Creando usuario administrador...");
-        userRepository.save(user);
-        System.out.println("Usuario administrador creado con éxito.");
+        Boolean adminExists = userRepository.findByEmail("testadmin@test.com").isPresent();
+
+        if (!adminExists) {
+            UserEntity user = UserEntity.builder()
+                    .name("TestAdmin")
+                    .password(passwordEncoder.encode("test"))
+                    .email("testadmin@test.com")
+                    .roles(Arrays.asList(adminRole))
+                    .enabled(true)
+                    .build();
+
+            userRepository.save(user);
+        }
 
         alreadySetup = true;
     }

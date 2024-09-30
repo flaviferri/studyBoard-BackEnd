@@ -33,6 +33,7 @@ public class UserServiceImpl implements IUserService {
     public UserEntity registerNewUserAccount(UserDTO accountDto) throws EmailExistsException {
 
         if (emailExist(accountDto.getEmail())) {
+
             throw new EmailExistsException("There is an account with that email address:" + accountDto.getEmail());
         }
 
