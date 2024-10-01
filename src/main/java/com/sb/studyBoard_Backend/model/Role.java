@@ -22,7 +22,7 @@ import jakarta.persistence.JoinColumn;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "roles")
-@Builder
+
 public class Role {
 
     @Id
@@ -46,7 +46,7 @@ public class Role {
         this.name = name;
     }
 
-    @Builder
+@Builder
     public Role(String name, Collection<Permission> permissions) {
         this.name = name;
         this.permissions = permissions;

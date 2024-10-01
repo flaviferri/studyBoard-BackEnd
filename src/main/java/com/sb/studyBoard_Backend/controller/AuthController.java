@@ -1,5 +1,8 @@
 package com.sb.studyBoard_Backend.controller;
 
+import com.sb.studyBoard_Backend.dto.AuthRequest;
+import com.sb.studyBoard_Backend.service.AuthService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +22,8 @@ public class AuthController {
 
     private final IUserService userService;
 
+    private final AuthService authService;
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
@@ -26,6 +31,16 @@ public class AuthController {
             return ResponseEntity.ok("User registered successfully!");
         } catch (EmailExistsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) {
+        try {
+            String token = authService.login(authRequest);
+            return ResponseEntity.ok(token);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 }
