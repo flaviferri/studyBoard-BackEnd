@@ -22,7 +22,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-@Builder
+
 public class UserEntity extends BaseEntity {
 
     @Id

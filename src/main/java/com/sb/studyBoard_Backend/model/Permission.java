@@ -17,7 +17,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "permissions")
-@Builder
 public class Permission {
 
     @Id
@@ -35,3 +34,4 @@ public class Permission {
         this.name = name;
     }
 }
+
