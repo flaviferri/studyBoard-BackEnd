@@ -34,6 +34,9 @@ public class Board extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private String color;
+
     @ManyToOne
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
     private UserEntity createdBy;
