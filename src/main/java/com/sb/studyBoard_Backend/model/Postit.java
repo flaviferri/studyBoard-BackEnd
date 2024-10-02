@@ -33,4 +33,6 @@ public class Postit extends BaseEntity {
     @ManyToOne
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
     private UserEntity createdBy;
+
+
 }

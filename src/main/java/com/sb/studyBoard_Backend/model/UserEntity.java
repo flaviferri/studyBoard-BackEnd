@@ -48,11 +48,11 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+    private Collection<RoleEntity> roles;
 
     @Builder
     public UserEntity(String name, String email, String githubId, String password, String avatarUrl, boolean enabled,
-                      Collection<Role> roles) {
+                      Collection<RoleEntity> roles) {
         this.name = name;
         this.email = email;
         this.githubId = githubId;
@@ -65,7 +65,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getRoleEnum().name()))
                 .collect(Collectors.toList());
     }
 

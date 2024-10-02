@@ -17,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "permissions")
-public class Permission {
+public class PermissionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,10 @@ public class Permission {
     private String name;
 
     @ManyToMany(mappedBy = "permissions")
-    private Collection<Role> roles;
+    private Collection<RoleEntity> roles;
 
     @Builder
-    public Permission(String name) {
+    public PermissionEntity(String name) {
         this.name = name;
     }
 }

@@ -32,5 +32,5 @@ public class UserGroupRole extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
-    private Role role;
+    private RoleEntity role;
 }
