@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/",
+                                "/home",
                                 "/auth/github/callback",
                                 "/api/users/login",
                                 "/api/users/register")

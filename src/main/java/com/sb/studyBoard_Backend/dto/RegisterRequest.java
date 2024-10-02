@@ -1,17 +1,14 @@
 package com.sb.studyBoard_Backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class RegisterRequest {
-    String username;
-    String password;
-    String email;
-    String avatarUrl;
+    private String name;
+    private String password;
+    private String email;
 }
