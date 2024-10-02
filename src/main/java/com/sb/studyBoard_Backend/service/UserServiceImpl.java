@@ -3,12 +3,13 @@ package com.sb.studyBoard_Backend.service;
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.sb.studyBoard_Backend.model.RoleEnum;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sb.studyBoard_Backend.dto.UserDTO;
 import com.sb.studyBoard_Backend.exceptions.EmailExistsException;
-import com.sb.studyBoard_Backend.model.Role;
+import com.sb.studyBoard_Backend.model.RoleEntity;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.RoleRepository;
 import com.sb.studyBoard_Backend.repository.UserRepository;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements IUserService {
             throw new EmailExistsException("There is an account with that email address:" + accountDto.getEmail());
         }
 
-        Optional<Role> defaultRole = roleRepository.findByName("ROLE_USER");
+        Optional<RoleEntity> defaultRole = roleRepository.findByRoleEnum(RoleEnum.USER);
 
         if (!defaultRole.isPresent()) {
             throw new RuntimeException("Default role not found!");

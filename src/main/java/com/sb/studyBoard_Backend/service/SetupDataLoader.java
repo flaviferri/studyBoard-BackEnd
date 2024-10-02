@@ -2,16 +2,16 @@ package com.sb.studyBoard_Backend.service;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.sb.studyBoard_Backend.model.RoleEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.sb.studyBoard_Backend.model.Permission;
-import com.sb.studyBoard_Backend.model.Role;
+import com.sb.studyBoard_Backend.model.RoleEntity;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.PermissionRepository;
 import com.sb.studyBoard_Backend.repository.RoleRepository;
@@ -24,24 +24,19 @@ import org.springframework.lang.NonNull;
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    @Value("${setup.alreadySetup:false}")
     private boolean alreadySetup = false;
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
-    private final PermissionRepository permissionRepository;
+    @Autowired
+    private PermissionRepository permissionRepository;
 
-    private final PasswordEncoder passwordEncoder;
-
-    public SetupDataLoader(UserRepository userRepository, RoleRepository roleRepository,
-            PermissionRepository permissionRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.permissionRepository = permissionRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -49,39 +44,52 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup)
             return;
 
-        Permission adminPermission = createPermissionIfNotFound("ADMIN_PERMISSION");
-        Permission readPostit = createPermissionIfNotFound("READ_POSTIT");
-        Permission writePostit = createPermissionIfNotFound("WRITE_POSTIT");
-        Permission deletePostit = createPermissionIfNotFound("DELETE_POSTIT");
-        Permission updatePostit = createPermissionIfNotFound("UPDATE_POSTIT");
+        Permission createPostitPermission = createPermissionIfNotFound("CREATE_POSTIT");
+        Permission readPostitPermission = createPermissionIfNotFound("READ_POSTIT");
+        Permission updatePostitPermission = createPermissionIfNotFound("UPDATE_POSTIT");
+        Permission deletePostitPermission = createPermissionIfNotFound("DELETE_POSTIT");
+        Permission refactorPermission = createPermissionIfNotFound("REFACTOR");
+
         Permission readGroup = createPermissionIfNotFound("READ_GROUP");
         Permission createGroup = createPermissionIfNotFound("CREATE_GROUP");
         Permission deleteGroup = createPermissionIfNotFound("DELETE_GROUP");
         Permission updateGroup = createPermissionIfNotFound("UPDATE_GROUP");
 
-        List<Permission> adminPermissions = Arrays.asList(readPostit, writePostit, deletePostit, updatePostit,
-                adminPermission, readGroup, createGroup, deleteGroup, updateGroup);
-        Role adminRole = createRoleIfNotFound("ROLE_ADMIN", adminPermissions);
+        Permission readBoard = createPermissionIfNotFound("READ_BOARD");
+        Permission createBoard = createPermissionIfNotFound("CREATE_BOARD");
+        Permission deleteBoard = createPermissionIfNotFound("DELETE_BOARD");
+        Permission updateBoard = createPermissionIfNotFound("UPDATE_BOARD");
 
-        createRoleIfNotFound("ROLE_USER", Arrays.asList(readPostit, writePostit));
+        // Crear roles y asignar permisos
+        RoleEntity roleAdmin = createRoleIfNotFound(RoleEnum.ADMIN, Arrays.asList(
+                createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission,
+                readBoard, createGroup, deleteGroup, updateGroup, readBoard, createBoard, deleteBoard, updateBoard, refactorPermission));
 
+        RoleEntity roleCreated = createRoleIfNotFound(RoleEnum.CREATED, Arrays.asList(
+                createBoard));
+
+        RoleEntity roleUser = createRoleIfNotFound(RoleEnum.USER, Arrays.asList(
+                createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission, readBoard, readGroup, createGroup));
+
+        // Crear usuario administrador si no existe
         Boolean adminExists = userRepository.findByEmail("testadmin@test.com").isPresent();
-
         if (!adminExists) {
-            UserEntity user = UserEntity.builder()
+            UserEntity adminUser = UserEntity.builder()
                     .name("TestAdmin")
                     .password(passwordEncoder.encode("test"))
                     .email("testadmin@test.com")
-                    .roles(Arrays.asList(adminRole))
+                    .roles(Arrays.asList(roleAdmin))
                     .enabled(true)
                     .build();
 
-            userRepository.save(user);
+            userRepository.save(adminUser);
         }
 
+        // Marcar como completado
         alreadySetup = true;
     }
 
+    // Métodos de ayuda para crear permisos y roles si no existen
     @Transactional
     Permission createPermissionIfNotFound(String name) {
         return permissionRepository.findByName(name)
@@ -93,10 +101,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    Role createRoleIfNotFound(String name, Collection<Permission> permissions) {
-        return roleRepository.findByName(name)
+    RoleEntity createRoleIfNotFound(RoleEnum roleEnum, Collection<Permission> permissions) {
+        return roleRepository.findByRoleEnum(roleEnum)
                 .orElseGet(() -> {
-                    Role role = new Role(name, permissions);
+                    RoleEntity role = new RoleEntity(roleEnum, permissions);
                     roleRepository.save(role);
                     return role;
                 });
