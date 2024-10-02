@@ -1,7 +1,6 @@
 package com.sb.studyBoard_Backend.config;
 
 import com.sb.studyBoard_Backend.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +22,6 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
     private CustomUserDetailsService userDetailsService;
 
     @Bean
@@ -32,7 +30,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/",
-                                "/home",
                                 "/auth/github/callback",
                                 "/api/users/login",
                                 "/api/users/register")
