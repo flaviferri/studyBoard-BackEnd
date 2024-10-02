@@ -4,8 +4,6 @@ import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.service.JwtService;
 import com.sb.studyBoard_Backend.service.UserService;
 
-import lombok.AllArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -16,7 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-@AllArgsConstructor
 @RestController
 public class LoginController {
 
@@ -31,6 +28,12 @@ public class LoginController {
 
     @Value("${github.client.secret}")
     private String clientSecret;
+
+    public LoginController(UserService userService, JwtService jwtService, RestTemplate restTemplate) {
+        this.userService = userService;
+        this.jwtService = jwtService;
+        this.restTemplate = restTemplate;
+    }
 
     @CrossOrigin(origins = "http://localhost:4001")
     @RequestMapping(value = "/auth/github/callback", method = { RequestMethod.GET, RequestMethod.POST })

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,15 +18,14 @@ import com.sb.studyBoard_Backend.repository.RoleRepository;
 import com.sb.studyBoard_Backend.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 
 import org.springframework.lang.NonNull;
 
-@AllArgsConstructor
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-    boolean alreadySetup = false;
+    @Value("${setup.alreadySetup:false}")
+    private boolean alreadySetup = false;
 
     private final UserRepository userRepository;
 
@@ -34,6 +34,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final PermissionRepository permissionRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    public SetupDataLoader(UserRepository userRepository, RoleRepository roleRepository,
+            PermissionRepository permissionRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     @Transactional
