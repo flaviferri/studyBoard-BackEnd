@@ -1,7 +1,9 @@
 package com.sb.studyBoard_Backend.service;
 
+import com.sb.studyBoard_Backend.model.Board;
 import com.sb.studyBoard_Backend.model.Postit;
 import com.sb.studyBoard_Backend.model.UserEntity;
+import com.sb.studyBoard_Backend.repository.BoardRepository;
 import com.sb.studyBoard_Backend.repository.PostitRepository;
 import com.sb.studyBoard_Backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,20 @@ public class PostitService implements IPostitService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BoardRepository boardRepository;
+
     @Override
-    public Postit createPostit(Postit postit, Long userId) throws AccessDeniedException {
+    public Postit createPostit(Postit postit, Long userId, Long boardId) throws AccessDeniedException {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (hasPermission(user, "CREATE")) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("Board not found"));
+
+        if (hasPermission(user, "CREATE_POSTIT")) {
+            postit.setCreatedBy(user);
+            postit.setBoard(board);
             return postitRepository.save(postit);
         } else {
             throw new AccessDeniedException("No tienes permiso para crear postits.");
@@ -35,7 +45,6 @@ public class PostitService implements IPostitService {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Verificar permisos antes de obtener el postit
         if (hasPermission(user, "READ_POSTIT")) {
             return postitRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Postit not found"));
@@ -60,20 +69,16 @@ public class PostitService implements IPostitService {
 
     @Override
     public void deletePostit(Long id, Long userId) throws AccessDeniedException {
-        // Buscar el usuario autenticado por su ID
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Verificar si el usuario tiene permisos para eliminar el postit
         if (hasPermission(user, "DELETE_POSTIT")) {
-            // Verificar que el postit exista antes de eliminarlo
+
             Postit postit = postitRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Postit not found"));
 
-            // Si todo está correcto, eliminar el postit
             postitRepository.delete(postit);
         } else {
-            // Si no tiene permisos, lanzar una excepción de acceso denegado
             throw new AccessDeniedException("No tienes permiso para eliminar postits.");
         }
     }

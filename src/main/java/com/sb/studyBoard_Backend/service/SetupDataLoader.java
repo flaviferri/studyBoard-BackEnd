@@ -44,14 +44,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup)
             return;
 
-        // Crear permisos
         PermissionEntity createPostitPermission = createPermissionIfNotFound("CREATE_POSTIT");
         PermissionEntity readPostitPermission = createPermissionIfNotFound("READ_POSTIT");
         PermissionEntity updatePostitPermission = createPermissionIfNotFound("UPDATE_POSTIT");
         PermissionEntity deletePostitPermission = createPermissionIfNotFound("DELETE_POSTIT");
         PermissionEntity refactorPermission = createPermissionIfNotFound("REFACTOR");
 
-        // Otros permisos adicionales que ya tenías
         PermissionEntity readGroup = createPermissionIfNotFound("READ_GROUP");
         PermissionEntity createGroup = createPermissionIfNotFound("CREATE_GROUP");
         PermissionEntity deleteGroup = createPermissionIfNotFound("DELETE_GROUP");
@@ -68,11 +66,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 readBoard, createGroup, deleteGroup, updateGroup,readBoard,createBoard,deleteBoard,updateBoard,refactorPermission ));
 
         RoleEntity roleCreated = createRoleIfNotFound(RoleEnum.CREATED, Arrays.asList(
-                createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission,
-                readBoard, createGroup, deleteGroup, updateGroup,readBoard,createBoard,deleteBoard,updateBoard));
+                createBoard));
 
         RoleEntity roleUser = createRoleIfNotFound(RoleEnum.USER, Arrays.asList(
-                createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission));
+                createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission, readBoard,readGroup,createGroup));
 
         // Crear usuario administrador si no existe
         Boolean adminExists = userRepository.findByEmail("testadmin@test.com").isPresent();

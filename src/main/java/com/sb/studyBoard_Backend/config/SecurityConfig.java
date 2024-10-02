@@ -37,6 +37,7 @@ public class SecurityConfig {
                                 "/api/users/login",
                                 "/api/users/register")
                         .permitAll()
+                        .requestMatchers("/api/postits/**").authenticated()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable());
 
@@ -57,7 +58,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -70,10 +70,10 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+}
 
     // @Bean
     // public PasswordEncoder passwordEncoder() {
     // return new BCryptPasswordEncoder();
     // }
 
-}

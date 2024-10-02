@@ -34,46 +34,4 @@ public class StudyBoardBackendApplication {
 			}
 		};
 	}
-
-/*	@Bean
-	CommandLineRunner init(UserRepository userRepository) {
-		return args -> {
-			PermissionEntity createPostitPermission = PermissionEntity.builder()
-					.name("CREATE_POSTIT")
-					.build();
-
-			PermissionEntity readPostitPermission = PermissionEntity.builder()
-					.name("READ_POSTIT")
-					.build();
-
-			PermissionEntity updatePostitPermission = PermissionEntity.builder()
-					.name("UPDATE_POSTIT")
-					.build();
-
-			PermissionEntity deletePostitPermission = PermissionEntity.builder()
-					.name("DELETE_POSTIT")
-					.build();
-			PermissionEntity refactorPermission = PermissionEntity.builder()
-					.name("REFACTOR")
-					.build();
-
-			*//*Create Role*//*
-			RoleEntity roleAdmin = RoleEntity.builder()
-					.roleEnum(RoleEnum.ADMIN)
-					.permissions(Set.of(createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission, refactorPermission))
-					.build();
-
-			RoleEntity roleCreated = RoleEntity.builder()
-					.roleEnum(RoleEnum.CREATED)
-					.permissions(Set.of(createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission))
-					.build();
-
-			RoleEntity roleUser = RoleEntity.builder()
-					.roleEnum(RoleEnum.USER)
-					.permissions(Set.of(createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission))
-					.build();
-		};
-
-
-	}*/
 }
