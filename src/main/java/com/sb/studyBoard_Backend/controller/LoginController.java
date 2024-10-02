@@ -1,11 +1,9 @@
 package com.sb.studyBoard_Backend.controller;
 
-
-
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.service.JwtService;
 import com.sb.studyBoard_Backend.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -19,14 +17,11 @@ import java.util.Map;
 @RestController
 public class LoginController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -34,14 +29,21 @@ public class LoginController {
     @Value("${github.client.secret}")
     private String clientSecret;
 
+    public LoginController(UserService userService, JwtService jwtService, RestTemplate restTemplate) {
+        this.userService = userService;
+        this.jwtService = jwtService;
+        this.restTemplate = restTemplate;
+    }
+
     @CrossOrigin(origins = "http://localhost:4001")
-    @RequestMapping(value = "/auth/github/callback", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/auth/github/callback", method = { RequestMethod.GET, RequestMethod.POST })
     public ResponseEntity<Map<String, Object>> githubCallback(@RequestParam("code") String code) {
         System.out.println("Received code: " + code);
 
         String accessToken = exchangeCodeForAccessToken(code);
         if (accessToken == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Unable to retrieve access token"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Unable to retrieve access token"));
         }
 
         Map<String, Object> userAttributes = fetchUserAttributes(accessToken);
@@ -63,11 +65,13 @@ public class LoginController {
 
         Map<String, String> body = new HashMap<>();
         body.put("client_id", clientId);
-        body.put("client_secret",  clientSecret);
+        body.put("client_secret", clientSecret);
         body.put("code", code);
 
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(body, headers);
-        ResponseEntity<Map<String, String>> response = restTemplate.exchange(url, HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
+        ResponseEntity<Map<String, String>> response = restTemplate.exchange(url, HttpMethod.POST, entity,
+                new ParameterizedTypeReference<>() {
+                });
 
         System.out.println("Response Body: " + response.getBody());
 
@@ -103,10 +107,10 @@ public class LoginController {
         }
     }
 
-
     @CrossOrigin(origins = "http://localhost:4001")
     @GetMapping("/home")
-    public ResponseEntity<Map<String,String>> greeting(@RequestParam(required = false, defaultValue = "World") String name) {
+    public ResponseEntity<Map<String, String>> greeting(
+            @RequestParam(required = false, defaultValue = "World") String name) {
         System.out.println("==== get greeting ====");
         return ResponseEntity.ok(Map.of("status", "ok"));
     }

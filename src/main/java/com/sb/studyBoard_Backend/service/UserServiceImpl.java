@@ -3,7 +3,6 @@ package com.sb.studyBoard_Backend.service;
 import java.util.Arrays;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,18 +14,17 @@ import com.sb.studyBoard_Backend.repository.RoleRepository;
 import com.sb.studyBoard_Backend.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 public class UserServiceImpl implements IUserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
