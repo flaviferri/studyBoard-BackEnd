@@ -1,3 +1,4 @@
+/*
 package com.sb.studyBoard_Backend.controller;
 
 import com.sb.studyBoard_Backend.model.UserEntity;
@@ -114,4 +115,4 @@ public class LoginController {
         System.out.println("==== get greeting ====");
         return ResponseEntity.ok(Map.of("status", "ok"));
     }
-}
+}*/

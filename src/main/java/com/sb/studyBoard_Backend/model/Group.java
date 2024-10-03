@@ -3,6 +3,7 @@ package com.sb.studyBoard_Backend.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +32,7 @@ public class Group extends BaseEntity {
     private String groupName;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
     private UserEntity createdBy;
 
