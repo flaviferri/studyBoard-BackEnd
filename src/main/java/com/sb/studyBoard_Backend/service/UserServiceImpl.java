@@ -7,7 +7,7 @@ import com.sb.studyBoard_Backend.model.RoleEnum;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sb.studyBoard_Backend.dto.UserDTO;
+import com.sb.studyBoard_Backend.dto.RegisterRequest;
 import com.sb.studyBoard_Backend.exceptions.EmailExistsException;
 import com.sb.studyBoard_Backend.model.RoleEntity;
 import com.sb.studyBoard_Backend.model.UserEntity;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    public UserEntity registerNewUserAccount(UserDTO accountDto) throws EmailExistsException {
+    public UserEntity registerNewUserAccount(RegisterRequest accountDto) throws EmailExistsException {
 
         if (emailExist(accountDto.getEmail())) {
 
