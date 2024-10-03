@@ -31,6 +31,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final JwtAuntenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationProvider authProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -49,25 +50,26 @@ public class SecurityConfig {
                         .sessionManagement(sessionManager -> 
                         sessionManager
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                            .authenticationProvider(authProvider)
                             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
                 
 
         return http.build();
     }
 
-    @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http
-                .getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
-    }
+    // @Bean
+    // public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+    //     AuthenticationManagerBuilder authenticationManagerBuilder = http
+    //             .getSharedObject(AuthenticationManagerBuilder.class);
+    //     authenticationManagerBuilder.userDetailsService(userDetailsService)
+    //             .passwordEncoder(passwordEncoder());
+    //     return authenticationManagerBuilder.build();
+    // }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    // @Bean
+    // public PasswordEncoder passwordEncoder() {
+    //     return new BCryptPasswordEncoder();
+    // }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
