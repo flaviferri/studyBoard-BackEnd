@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sb.studyBoard_Backend.dto.RegisterRequest;
 import com.sb.studyBoard_Backend.exceptions.EmailExistsException;
-import com.sb.studyBoard_Backend.service.IUserService;
 
 import lombok.AllArgsConstructor;
 
@@ -20,27 +19,30 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/users")
 public class AuthController {
 
-    private final IUserService userService;
-
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
         try {
-            userService.registerNewUserAccount(registerRequest);
-            return ResponseEntity.ok("User registered successfully!");
+            String token = authService.register(registerRequest);
+            AuthResponse response = AuthResponse.builder().token(token).build();
+
+            return ResponseEntity.ok(response);
         } catch (EmailExistsException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(AuthResponse.builder().error(e.getMessage()).build());
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
         try {
             String token = authService.login(authRequest);
-            return ResponseEntity.ok(token);
+            AuthResponse response = AuthResponse.builder().token(token).build();
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(AuthResponse.builder().error(e.getMessage()).build());
         }
     }
 }

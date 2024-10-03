@@ -1,18 +1,21 @@
 package com.sb.studyBoard_Backend.controller;
 
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter
 @Builder
-@NoArgsConstructor
 public class AuthResponse {
 
     private String token;
 
-    public AuthResponse(String token) {
+    private String error;
+
+    @Builder
+    public AuthResponse(String token, String error) {
         this.token = token;
+        this.error = error;
     }
 }
