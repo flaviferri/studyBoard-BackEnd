@@ -52,20 +52,7 @@ public class PostitService implements IPostitService {
             throw new AccessDeniedException("No tienes permiso para leer postits.");
         }
     }
-   /* @Override
-    public Postit updatePostit(Long id, Postit postit, Long userId) throws AccessDeniedException {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Verificar permisos antes de actualizar un postit
-        if (hasPermission(user, "UPDATE")) {
-            Postit existingPostit = getPostitById(id);
-            existingPostit.setContent(postit.getContent());
-            return postitRepository.save(existingPostit);
-        } else {
-            throw new AccessDeniedException("No tienes permiso para actualizar postits.");
-        }
-    }*/
 
     @Override
     public void deletePostit(Long id, Long userId) throws AccessDeniedException {
@@ -84,7 +71,7 @@ public class PostitService implements IPostitService {
     }
 
     // Método privado para verificar permisos
-    private boolean hasPermission(UserEntity user, String permissionName) {
+    public boolean hasPermission(UserEntity user, String permissionName) {
         return user.getRoles().stream()
                 .flatMap(role -> role.getPermissions().stream())
                 .anyMatch(permission -> permission.getName().equals(permissionName));

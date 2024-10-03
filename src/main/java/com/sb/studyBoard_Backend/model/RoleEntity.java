@@ -2,6 +2,7 @@ package com.sb.studyBoard_Backend.model;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -44,5 +45,7 @@ public class RoleEntity {
         this.roleEnum = roleEnum;
         this.permissions = permissions;
     }
+
+
 
 }
