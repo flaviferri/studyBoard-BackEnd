@@ -70,7 +70,6 @@ public class PostitService implements IPostitService {
         }
     }
 
-    // Método privado para verificar permisos
     public boolean hasPermission(UserEntity user, String permissionName) {
         return user.getRoles().stream()
                 .flatMap(role -> role.getPermissions().stream())
