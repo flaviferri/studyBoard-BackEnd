@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.studyBoard_Backend.dto.UserDTO;
+import com.sb.studyBoard_Backend.dto.RegisterRequest;
 import com.sb.studyBoard_Backend.exceptions.EmailExistsException;
 import com.sb.studyBoard_Backend.service.IUserService;
 
@@ -25,9 +25,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
         try {
-            userService.registerNewUserAccount(userDTO);
+            userService.registerNewUserAccount(registerRequest);
             return ResponseEntity.ok("User registered successfully!");
         } catch (EmailExistsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
