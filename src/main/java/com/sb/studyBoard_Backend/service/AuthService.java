@@ -1,15 +1,24 @@
 package com.sb.studyBoard_Backend.service;
 
 import com.sb.studyBoard_Backend.dto.AuthRequest;
+import com.sb.studyBoard_Backend.dto.RegisterRequest;
+import com.sb.studyBoard_Backend.exceptions.EmailExistsException;
+import com.sb.studyBoard_Backend.model.RoleEntity;
+import com.sb.studyBoard_Backend.model.RoleEnum;
 import com.sb.studyBoard_Backend.model.UserEntity;
+import com.sb.studyBoard_Backend.repository.RoleRepository;
+import com.sb.studyBoard_Backend.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
+import java.util.Arrays;
 
+import java.util.Optional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -20,7 +29,47 @@ public class AuthService {
 
     private final JwtService jwtService;
 
-    private final UserServiceImpl userService;
+    private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public String register(RegisterRequest accountDto) throws EmailExistsException {
+        if (emailExist(accountDto.getEmail())) {
+            throw new EmailExistsException("There is an account with that email address:" + accountDto.getEmail());
+        }
+
+        Optional<RoleEntity> defaultRole = roleRepository.findByRoleEnum(RoleEnum.USER);
+        if (!defaultRole.isPresent()) {
+            throw new RuntimeException("Default role not found!");
+        }
+
+        // Crear y guardar el usuario
+        UserEntity user = UserEntity.builder()
+                .name(accountDto.getName())
+                .email(accountDto.getEmail())
+                .password(passwordEncoder.encode(accountDto.getPassword()))
+                .enabled(true)
+                .roles(Arrays.asList(defaultRole.get()))
+                .build();
+
+        UserEntity userCreated = userRepository.save(user);
+
+        // // Autenticar al usuario automáticamente
+        // authenticationManager.authenticate(
+        // new UsernamePasswordAuthenticationToken(
+        // accountDto.getEmail(),
+        // accountDto.getPassword()));
+
+        String token = jwtService.generateToken(userCreated);
+
+        return token;
+    }
+
+    private boolean emailExist(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
 
     public String login(AuthRequest authRequest) throws Exception {
         try {
