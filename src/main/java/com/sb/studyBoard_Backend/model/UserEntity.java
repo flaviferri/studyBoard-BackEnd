@@ -6,6 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +46,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
