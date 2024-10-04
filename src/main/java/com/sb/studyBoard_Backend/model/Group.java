@@ -32,10 +32,10 @@ public class Group extends BaseEntity {
     private String groupName;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
     private UserEntity createdBy;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "group")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
