@@ -1,10 +1,18 @@
 package com.sb.studyBoard_Backend.controller;
 
+import com.sb.studyBoard_Backend.dto.GithubUserDto;
+import com.sb.studyBoard_Backend.model.RoleEntity;
+import com.sb.studyBoard_Backend.model.RoleEnum;
 import com.sb.studyBoard_Backend.model.UserEntity;
+import com.sb.studyBoard_Backend.repository.RoleRepository;
+import com.sb.studyBoard_Backend.repository.UserRepository;
 import com.sb.studyBoard_Backend.service.JwtService;
 import com.sb.studyBoard_Backend.service.UserService;
 
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class LoginController {
@@ -23,16 +32,23 @@ public class LoginController {
 
     private final RestTemplate restTemplate;
 
+    @Autowired
+    private final UserRepository userRepository;
+    @Autowired
+    private final RoleRepository roleRepository;
+
     @Value("${github.client.id}")
     private String clientId;
 
     @Value("${github.client.secret}")
     private String clientSecret;
 
-    public LoginController(UserService userService, JwtService jwtService, RestTemplate restTemplate) {
+    public LoginController(UserService userService, JwtService jwtService, RestTemplate restTemplate, UserRepository userRepository, RoleRepository roleRepository) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.restTemplate = restTemplate;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @CrossOrigin(origins = "http://localhost:4001")
@@ -114,4 +130,36 @@ public class LoginController {
         System.out.println("==== get greeting ====");
         return ResponseEntity.ok(Map.of("status", "ok"));
     }
+
+   /* @Transactional
+    public String registerOrLoginGithubUser(GithubUserDto githubUserDto) {
+        // Verificar si el usuario ya existe en la base de datos por su ID de GitHub
+        Optional<UserEntity> existingUser = userRepository.findByGithubId(githubUserDto.getGithubId());
+
+        if (existingUser.isPresent()) {
+            // Si el usuario ya existe, generar el token JWT y retornar
+            return jwtService.generateToken(existingUser.get());
+        } else {
+            // Si no existe, registrar un nuevo usuario con los datos obtenidos de GitHub
+            Optional<RoleEntity> userRole = roleRepository.findByRoleEnum(RoleEnum.USER);
+            if (!userRole.isPresent()) {
+                throw new RuntimeException("Default role USER not found!");
+            }
+
+            // Crear y guardar el nuevo usuario
+            UserEntity newUser = UserEntity.builder()
+                    .githubId(githubUserDto.getGithubId())
+                    .name(githubUserDto.getName())
+                    .email(githubUserDto.getEmail())
+                    .roles(Collections.singletonList(userRole.get()))  // Asignar el rol USER
+                    .enabled(true)
+                    .build();
+
+            UserEntity userCreated = userRepository.save(newUser);
+
+            // Generar el token JWT para el nuevo usuario
+            return jwtService.generateToken(userCreated);
+        }
+    }*/
 }
+

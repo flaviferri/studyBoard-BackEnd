@@ -17,7 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "permissions")
-public class Permission {
+public class PermissionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class Permission {
     private Collection<RoleEntity> roles;
 
     @Builder
-    public Permission(String name) {
+    public PermissionEntity(String name) {
         this.name = name;
     }
 }

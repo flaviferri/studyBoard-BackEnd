@@ -1,6 +1,7 @@
 package com.sb.studyBoard_Backend.service;
 
 import com.sb.studyBoard_Backend.dto.AuthRequest;
+import com.sb.studyBoard_Backend.dto.GithubUserDto;
 import com.sb.studyBoard_Backend.dto.RegisterRequest;
 import com.sb.studyBoard_Backend.exceptions.EmailExistsException;
 import com.sb.studyBoard_Backend.model.RoleEntity;
@@ -12,6 +13,7 @@ import com.sb.studyBoard_Backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import java.util.Arrays;
 
+import java.util.Collections;
 import java.util.Optional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -87,4 +89,34 @@ public class AuthService {
             throw new Exception("Invalid credentials");
         }
     }
+
+ /*   public String loginWithGithub(GithubUserDto githubUserDto) {
+        Optional<UserEntity> optionalUser = userRepository.findByGithubId(githubUserDto.getGithubId());
+
+        UserEntity user;
+        if (optionalUser.isPresent()) {
+            // El usuario ya existe, lo cargamos
+            user = optionalUser.get();
+        } else {
+            // El usuario no existe, lo creamos y le asignamos el rol USER
+            RoleEntity userRole = roleRepository.findByRoleEnum(RoleEnum.USER)
+                    .orElseThrow(() -> new RuntimeException("Role USER not found!"));
+
+            user = new UserEntity();
+            user.setGithubId(githubUserDto.getGithubId());
+            user.setName(githubUserDto.getName());
+            user.setEmail(githubUserDto.getEmail());
+            user.setAvatarUrl(githubUserDto.getAvatarUrl());
+            user.setEnabled(true);
+
+            // Asignar el rol USER
+            user.setRoles(Collections.singletonList(userRole));
+
+            // Guardar el usuario en la base de datos
+            user = userRepository.save(user);
+        }
+
+        // Generar un token JWT para el usuario autenticado
+        return jwtService.generateToken(user);
+    }*/
 }

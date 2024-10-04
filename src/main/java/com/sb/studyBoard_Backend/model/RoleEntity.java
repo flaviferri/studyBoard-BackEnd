@@ -29,7 +29,7 @@ public class RoleEntity {
 
     @ManyToMany
     @JoinTable(name = "roles_permissions", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
-    private Collection<Permission> permissions;
+    private Collection<PermissionEntity> permissions;
 
     @OneToMany(mappedBy = "role")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
@@ -39,7 +39,7 @@ public class RoleEntity {
     }
 
     @Builder
-    public RoleEntity(RoleEnum roleEnum, Collection<Permission> permissions) {
+    public RoleEntity(RoleEnum roleEnum, Collection<PermissionEntity> permissions) {
         this.roleEnum = roleEnum;
         this.permissions = permissions;
     }
