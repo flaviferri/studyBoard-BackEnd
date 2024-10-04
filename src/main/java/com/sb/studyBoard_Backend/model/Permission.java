@@ -17,7 +17,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "permissions")
-@Builder
 public class Permission {
 
     @Id
@@ -28,10 +27,11 @@ public class Permission {
     private String name;
 
     @ManyToMany(mappedBy = "permissions")
-    private Collection<Role> roles;
+    private Collection<RoleEntity> roles;
 
     @Builder
     public Permission(String name) {
         this.name = name;
     }
 }
+

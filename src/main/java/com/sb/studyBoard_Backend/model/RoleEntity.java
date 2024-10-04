@@ -4,17 +4,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.*;
-import jakarta.persistence.JoinColumn;
 
 @Entity
 @Getter
@@ -22,17 +14,19 @@ import jakarta.persistence.JoinColumn;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "roles")
-@Builder
-public class Role {
+
+public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum roleEnum;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Collection<UserEntity> users;
 
     @ManyToMany
@@ -42,13 +36,13 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
-    public Role(String name) {
-        this.name = name;
+    public RoleEntity(RoleEnum roleEnum) {
+        this.roleEnum = roleEnum;
     }
 
     @Builder
-    public Role(String name, Collection<Permission> permissions) {
-        this.name = name;
+    public RoleEntity(RoleEnum roleEnum, Collection<Permission> permissions) {
+        this.roleEnum = roleEnum;
         this.permissions = permissions;
     }
 

@@ -1,5 +1,6 @@
 package com.sb.studyBoard_Backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +24,7 @@ public class UserGroupRole extends BaseEntity {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
 
@@ -32,5 +34,5 @@ public class UserGroupRole extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
-    private Role role;
+    private RoleEntity role;
 }

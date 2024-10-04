@@ -9,7 +9,8 @@ import com.sb.studyBoard_Backend.model.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByEmail(String email);
-
     Optional<UserEntity> findByGithubId(String githubId);
+
+
 
 }
