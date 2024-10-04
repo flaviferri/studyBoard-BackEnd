@@ -6,8 +6,7 @@ import com.sb.studyBoard_Backend.model.Board;
 import com.sb.studyBoard_Backend.model.Group;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.BoardRepository;
-import com.sb.studyBoard_Backend.repository.GroupRepository;
-import com.sb.studyBoard_Backend.repository.UserRepository;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +23,14 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final GroupService groupService;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final AuthService authService;
 
-    public Set<Board> getAllBoards(Long groupId, Long userId) {
-        Group group = groupService.findByID(groupId).orElseThrow(() ->
+    public Set<Board> getAllBoards(Long groupId) {
+        Group group = groupService.getGroupById(groupId).orElseThrow(() ->
                 new GroupNotFoundException("El grupo no existe."));
-        UserEntity user = userRepository.findById(userId)
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
         /*   Esto descomentar si al final solo los miembros pueden ver el grupo
@@ -46,15 +47,18 @@ public class BoardService {
         return boards;
     }
 
-    public ResponseEntity<Object> addBoard(Board board) {
-        UserEntity user = userRepository.findById(board.getCreatedBy().getId())
+    public ResponseEntity<Object> addBoard(Board board, Long groupId) {
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-        Group group = groupService.findByID(board.getGroup()).orElseThrow(() ->
+        Group group = groupService.getGroupById(groupId).orElseThrow(() ->
                 new GroupNotFoundException("El grupo no existe."));
         if (!Objects.equals(group.getCreatedBy().getId(), user.getId())) {
             throw new AccessDeniedException("No tienes permiso para agregar un board en este grupo");
         }
 
+        board.setGroup(group);
+        board.setCreatedBy(user);
         boardRepository.save(board);
         return new ResponseEntity<>(board, HttpStatus.CREATED);
     }

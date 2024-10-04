@@ -16,6 +16,7 @@ public class GroupService {
     private GroupRepository groupRepository;
 
     public Group createGroup(Group group) {
+
         return groupRepository.save(group);
     }
 
