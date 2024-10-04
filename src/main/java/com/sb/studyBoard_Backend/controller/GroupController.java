@@ -11,12 +11,12 @@ import com.sb.studyBoard_Backend.model.RoleEntity;
 import com.sb.studyBoard_Backend.model.RoleEnum;
 import com.sb.studyBoard_Backend.model.Group;
 import com.sb.studyBoard_Backend.model.UserEntity;
+import com.sb.studyBoard_Backend.model.UserGroupRole;
 import com.sb.studyBoard_Backend.service.GroupService;
 import com.sb.studyBoard_Backend.service.RoleService;
+import com.sb.studyBoard_Backend.service.UserGroupRoleService;
 import com.sb.studyBoard_Backend.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @AllArgsConstructor
@@ -26,10 +26,11 @@ public class GroupController {
     private final GroupService groupService;
     private final UserService userService;
     private final RoleService roleService;
+    private final UserGroupRoleService userGroupRoleService;
 
     @PostMapping("/add")
     public ResponseEntity<Group> createGroup(@RequestBody Group group) {
-        // Buscar el usuario por userId
+
         String username = getAuthenticatedUsername();
         UserEntity user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -40,8 +41,19 @@ public class GroupController {
         // Guardar el grupo en la base de datos
         Group createdGroup = groupService.createGroup(group);
 
-        // RoleEnum createdRole = roleService.findOrCreateGroupRole("CREATED", createdGroup);
-        // userService.assignRoleToUser(user, createdRole);
+        RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
+            .orElseThrow(() -> new RuntimeException("CREATED role not found"));
+
+        UserGroupRole userGroupRole = new UserGroupRole();
+        userGroupRole.setUser(user);
+        userGroupRole.setGroup(createdGroup);
+        userGroupRole.setRole(createdRole);
+
+        System.out.println("User: " + user.getUsername());
+        System.out.println("Group: " + createdGroup.getGroupName());
+        System.out.println("Role: " + createdRole.getRoleEnum());
+
+        userGroupRoleService.save(userGroupRole);
 
         // Retornar la respuesta con el grupo creado
         return ResponseEntity.ok(createdGroup);
