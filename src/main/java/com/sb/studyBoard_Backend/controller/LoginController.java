@@ -54,7 +54,7 @@ public class LoginController {
         UserEntity savedUser = userService.saveOrUpdateUser(userAttributes);
         String token = jwtService.generateToken(savedUser);
 
-        return ResponseEntity.ok(Map.of("token", token, "user", savedUser));
+        return ResponseEntity.ok(Map.of("token", token));
     }
 
     private String exchangeCodeForAccessToken(String code) {
