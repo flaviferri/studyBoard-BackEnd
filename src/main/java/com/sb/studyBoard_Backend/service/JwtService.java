@@ -18,9 +18,9 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY = "HVkzZjNkzsm3jnkFAJh4KSDHsojq9k3m9jJcmDzokAs="; // Cambia esto por una clave
-                                                                                      // secreta segura
-    private final long EXPIRATION_TIME = 86400000; // 1 día en milisegundos
+    private final String SECRET_KEY = "HVkzZjNkzsm3jnkFAJh4KSDHsojq9k3m9jJcmDzokAs=";
+
+    private final long EXPIRATION_TIME = 86400000;
 
     public String generateToken(UserEntity user) {
         return Jwts.builder()
