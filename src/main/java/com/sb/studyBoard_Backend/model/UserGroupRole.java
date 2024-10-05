@@ -1,5 +1,6 @@
 package com.sb.studyBoard_Backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,12 +25,13 @@ public class UserGroupRole extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
+    @JsonBackReference(value = "group-userGroupRole")
     private Group group;
 
     @ManyToOne

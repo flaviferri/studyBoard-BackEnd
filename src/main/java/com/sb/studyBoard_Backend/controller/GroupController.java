@@ -4,6 +4,7 @@ package com.sb.studyBoard_Backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,8 @@ public class GroupController {
     private final RoleService roleService;
     private final UserGroupRoleService userGroupRoleService;
 
-    @PostMapping("/add")
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Group> createGroup(@RequestBody Group group) {
 
         String username = getAuthenticatedUsername();
@@ -48,11 +50,6 @@ public class GroupController {
         userGroupRole.setUser(user);
         userGroupRole.setGroup(createdGroup);
         userGroupRole.setRole(createdRole);
-
-        System.out.println("User: " + user.getUsername());
-        System.out.println("Group: " + createdGroup.getGroupName());
-        System.out.println("Role: " + createdRole.getRoleEnum());
-
         userGroupRoleService.save(userGroupRole);
 
         // Retornar la respuesta con el grupo creado
@@ -68,6 +65,7 @@ public class GroupController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/all")
     public ResponseEntity<List<Group>> getAllGroups() {
         List<Group> groups = groupService.getAllGroups();
