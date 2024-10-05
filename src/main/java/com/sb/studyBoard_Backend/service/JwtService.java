@@ -23,6 +23,7 @@ public class JwtService {
     private final long EXPIRATION_TIME = 86400000;
 
     public String generateToken(UserEntity user) {
+        
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
