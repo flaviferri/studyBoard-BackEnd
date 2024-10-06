@@ -3,6 +3,7 @@ package com.sb.studyBoard_Backend.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ public class Board extends BaseEntity {
     private Long id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "group_id")
     private Group group;
 
