@@ -3,8 +3,10 @@ package com.sb.studyBoard_Backend.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,7 +38,6 @@ public class Group extends BaseEntity {
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
     private UserEntity createdBy;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "group")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 

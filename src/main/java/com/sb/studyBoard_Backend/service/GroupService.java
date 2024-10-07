@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.sb.studyBoard_Backend.model.Group;
 import com.sb.studyBoard_Backend.repository.GroupRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 public class GroupService {
     private GroupRepository groupRepository;
 
+   @Transactional 
     public Group createGroup(Group group) {
 
         return groupRepository.save(group);
