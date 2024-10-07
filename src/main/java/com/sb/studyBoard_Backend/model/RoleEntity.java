@@ -4,7 +4,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +29,6 @@ public class RoleEntity {
     private RoleEnum roleEnum;
 
     @ManyToMany(mappedBy = "roles")
-    @JsonIgnore
     private Collection<UserEntity> users;
 
     @ManyToMany
