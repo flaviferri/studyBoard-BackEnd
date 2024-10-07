@@ -2,7 +2,6 @@ package com.sb.studyBoard_Backend.service;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import com.sb.studyBoard_Backend.model.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,10 +100,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    RoleEntity createRoleIfNotFound(RoleEnum roleEnum, Collection<PermissionEntity> permissions) {
+    RoleEntity createRoleIfNotFound(RoleEnum roleEnum, Collection<PermissionEntity> permissionsEntity) {
         return roleRepository.findByRoleEnum(roleEnum)
                 .orElseGet(() -> {
-                    RoleEntity role = new RoleEntity(roleEnum, permissions);
+                    RoleEntity role = new RoleEntity(roleEnum, permissionsEntity);
                     roleRepository.save(role);
                     return role;
                 });

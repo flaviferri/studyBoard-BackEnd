@@ -6,6 +6,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,9 +46,10 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private boolean enabled;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

@@ -1,12 +1,11 @@
 package com.sb.studyBoard_Backend.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -15,8 +14,8 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "roles")
 
-
 public class RoleEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +30,7 @@ public class RoleEntity {
 
     @ManyToMany
     @JoinTable(name = "roles_permissions", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
-    private Collection<PermissionEntity> permissions;
+    private Collection<PermissionEntity> permissionsEntity;
 
     @OneToMany(mappedBy = "role")
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
@@ -41,11 +40,8 @@ public class RoleEntity {
     }
 
     @Builder
-    public RoleEntity(RoleEnum roleEnum, Collection<PermissionEntity> permissions) {
+    public RoleEntity(RoleEnum roleEnum, Collection<PermissionEntity> permissionsEntity) {
         this.roleEnum = roleEnum;
-        this.permissions = permissions;
+        this.permissionsEntity = permissionsEntity;
     }
-
-
-
 }

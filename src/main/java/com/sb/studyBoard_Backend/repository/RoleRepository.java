@@ -9,10 +9,7 @@ import com.sb.studyBoard_Backend.model.RoleEntity;
 
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 
-/*  Optional<RoleEntity> findByName(String name);*/
+   /* Optional<RoleEntity> findByName(String name);*/
 
     Optional<RoleEntity> findByRoleEnum(RoleEnum roleEnum);
-
-
 }
-

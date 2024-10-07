@@ -2,7 +2,6 @@ package com.sb.studyBoard_Backend.controller;
 
 
 import com.sb.studyBoard_Backend.model.UserEntity;
-import com.sb.studyBoard_Backend.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
