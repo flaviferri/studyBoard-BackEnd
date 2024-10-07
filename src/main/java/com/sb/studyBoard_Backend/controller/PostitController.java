@@ -21,18 +21,15 @@ public class PostitController {
     @Autowired
     private PostitService postitService;
 
-    // Crear un nuevo Postit
     @PreAuthorize("hasAuthority('CREATE_POSTIT')")
-    @PostMapping
+    @PostMapping("/postits")
     public ResponseEntity<Postit> createPostit(@RequestBody Postit postit,
-                                               @RequestParam Long boardId,
+                                               @PathVariable Long boardId,
                                                Authentication authentication) {
         try {
-            // Obtener el usuario autenticado
             UserEntity user = (UserEntity) authentication.getPrincipal();
             Long userId = user.getId();
 
-            // Crear el postit asignando el creador y el board
             Postit createdPostit = postitService.createPostit(postit, userId, boardId);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPostit);
 
@@ -42,6 +39,7 @@ public class PostitController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
     // Obtener un Postit por ID
     @PreAuthorize("hasAuthority('READ_POSTIT')")

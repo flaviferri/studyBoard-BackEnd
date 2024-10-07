@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
-@RestController
+/*@RestController
 @RequestMapping("/users")
     public class UserController {
 
@@ -31,7 +31,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body("An error occurred while changing the user role.");
         }
-    }
+    }*/
 
     // Cambiar el rol a USER
  /*   @PutMapping("/role/user/{userId}")
@@ -44,6 +44,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body("An error occurred while changing the user role.");
         }*/
-    }
+
 
 

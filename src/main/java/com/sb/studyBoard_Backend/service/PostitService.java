@@ -72,7 +72,7 @@ public class PostitService implements IPostitService {
 
     public boolean hasPermission(UserEntity user, String permissionName) {
         return user.getRoles().stream()
-                .flatMap(role -> role.getPermissions().stream())
+                .flatMap(role -> role.getPermissionsEntity().stream())
                 .anyMatch(permission -> permission.getName().equals(permissionName));
     }
 

@@ -17,7 +17,6 @@ import com.sb.studyBoard_Backend.dto.RoleDTO;
 import com.sb.studyBoard_Backend.dto.UserDTO;
 import com.sb.studyBoard_Backend.dto.UserGroupRoleDTO;
 import com.sb.studyBoard_Backend.model.Group;
-import com.sb.studyBoard_Backend.model.Permission;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.model.UserGroupRole;
 import com.sb.studyBoard_Backend.service.GroupService;
@@ -114,8 +113,8 @@ public class GroupController {
         dto.setId(role.getId());
         dto.setRoleEnum(role.getRoleEnum().name());
 
-        List<PermissionDTO> permissionsDTO = (role.getPermissions() != null && !role.getPermissions().isEmpty())
-                ? role.getPermissions().stream()
+        List<PermissionDTO> permissionsDTO = (role.getPermissionsEntity() != null && !role.getPermissionsEntity().isEmpty())
+                ? role.getPermissionsEntity().stream()
                         .map(this::convertToDTO)
                         .collect(Collectors.toList())
                 : new ArrayList<>();
@@ -124,8 +123,8 @@ public class GroupController {
         return dto;
     }
 
-    private PermissionDTO convertToDTO(Permission permission) {
-        return new PermissionDTO(permission.getId(), permission.getName());
+    private PermissionDTO convertToDTO(PermissionEntity permissionEntity) {
+        return new PermissionDTO(permissionEntity.getId(), permissionEntity.getName());
     }
 
     private UserGroupRoleDTO convertToDTO(UserGroupRole userGroupRole) {

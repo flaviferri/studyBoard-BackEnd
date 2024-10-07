@@ -40,9 +40,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Override
     @Transactional
     public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
-        if (alreadySetup)
+        if (alreadySetup) {
             return;
+        }
 
+        // Crear permisos
         PermissionEntity createPostitPermission = createPermissionIfNotFound("CREATE_POSTIT");
         PermissionEntity readPostitPermission = createPermissionIfNotFound("READ_POSTIT");
         PermissionEntity updatePostitPermission = createPermissionIfNotFound("UPDATE_POSTIT");
@@ -55,24 +57,39 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         PermissionEntity updateGroup = createPermissionIfNotFound("UPDATE_GROUP");
 
         PermissionEntity readBoard = createPermissionIfNotFound("READ_BOARD");
-        PermissionEntity createBoard  = createPermissionIfNotFound("CREATE_BOARD");
-        PermissionEntity deleteBoard  = createPermissionIfNotFound("DELETE_BOARD");
-        PermissionEntity updateBoard  = createPermissionIfNotFound("UPDATE_BOARD");
+        PermissionEntity createBoard = createPermissionIfNotFound("CREATE_BOARD");
+        PermissionEntity deleteBoard = createPermissionIfNotFound("DELETE_BOARD");
+        PermissionEntity updateBoard = createPermissionIfNotFound("UPDATE_BOARD");
 
-        // Crear roles y asignar permisos
         RoleEntity roleAdmin = createRoleIfNotFound(RoleEnum.ADMIN, Arrays.asList(
-                createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission,
-                readBoard, createGroup, deleteGroup, updateGroup,readBoard,createBoard,deleteBoard,updateBoard,refactorPermission ));
+                createPostitPermission,
+                readPostitPermission,
+                updatePostitPermission,
+                deletePostitPermission,
+                readBoard,
+                createGroup,
+                deleteGroup,
+                updateGroup,
+                createBoard,
+                deleteBoard,
+                updateBoard,
+                refactorPermission
+        ));
 
-        RoleEntity roleCreated = createRoleIfNotFound(RoleEnum.CREATED, Arrays.asList(
-                createBoard));
+        RoleEntity roleCreated = createRoleIfNotFound(RoleEnum.CREATED, Arrays.asList(createBoard));
 
         RoleEntity roleUser = createRoleIfNotFound(RoleEnum.USER, Arrays.asList(
-                createPostitPermission, readPostitPermission, updatePostitPermission, deletePostitPermission, readBoard,readGroup,createGroup));
+                createPostitPermission,
+                readPostitPermission,
+                updatePostitPermission,
+                deletePostitPermission,
+                readBoard,
+                readGroup,
+                createGroup
+        ));
 
         // Crear usuario administrador si no existe
-        Boolean adminExists = userRepository.findByEmail("testadmin@test.com").isPresent();
-        if (!adminExists) {
+        if (!userRepository.findByEmail("testadmin@test.com").isPresent()) {
             UserEntity adminUser = UserEntity.builder()
                     .name("TestAdmin")
                     .password(passwordEncoder.encode("test"))

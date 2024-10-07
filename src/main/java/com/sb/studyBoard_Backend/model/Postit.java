@@ -24,19 +24,13 @@ public class Postit extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "board_id", nullable = false)
+    @JoinColumn(name = "board_id")
     private Board board;
 
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private String description;
-
-
     @ManyToOne
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
     private UserEntity createdBy;
-
-
 }

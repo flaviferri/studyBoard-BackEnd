@@ -46,7 +46,7 @@ public class PostitServiceTest {
         mockRole.setRoleEnum(RoleEnum.USER);
         PermissionEntity mockPermission = new PermissionEntity();
         mockPermission.setName("CREATE_POSTIT");
-        mockRole.setPermissions(new HashSet<>(Collections.singletonList(mockPermission)));
+        mockRole.setPermissionsEntity(new HashSet<>(Collections.singletonList(mockPermission)));
 
         mockUser.setRoles(new HashSet<>(Collections.singletonList(mockRole)));
 

@@ -38,22 +38,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults())
-            .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 "/",
                                 "/home",
                                 "/auth/github/callback",
                                 "/api/users/login",
-                                "/api/users/register")
-                        .permitAll()
-                        .anyRequest().authenticated()
-                        )
-                        .sessionManagement(sessionManager -> 
+                                "/api/users/register"
+                        ).permitAll()
+                        .requestMatchers("/postits/**").hasAuthority("CREATE_POSTIT") // Asegúrate de que el rol esté bien definido
+                        .anyRequest().authenticated() // Todas las demás solicitudes requieren autenticación
+                )
+                .sessionManagement(sessionManager ->
                         sessionManager
-                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-                
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sin sesión, usando JWT
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -20,7 +20,7 @@ public class PermissionEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "permissions")
+    @ManyToMany(mappedBy = "permissionsEntity")
     private Collection<RoleEntity> roles;
 
     @Builder
