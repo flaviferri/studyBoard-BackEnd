@@ -21,7 +21,7 @@ public class BoardController {
         return boardService.getAllBoards(groupId);
     }
 
-    /*@PreAuthorize("hasAuthority('CREATE_BOARD')")*/
+   @PreAuthorize("hasAnyAuthority('ADMIN','CREATED')")
     @PostMapping("/{groupId}/add")
     public ResponseEntity<Object> addBoard(@PathVariable Long groupId, @RequestBody Board board) {
         return boardService.addBoard(board, groupId);
