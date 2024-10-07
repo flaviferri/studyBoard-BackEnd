@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import com.sb.studyBoard_Backend.model.*;
+import com.sb.studyBoard_Backend.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import com.sb.studyBoard_Backend.model.RoleEntity;
 import com.sb.studyBoard_Backend.model.RoleEnum;
@@ -26,6 +26,7 @@ import com.sb.studyBoard_Backend.service.RoleService;
 import com.sb.studyBoard_Backend.service.UserGroupRoleService;
 import com.sb.studyBoard_Backend.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 @AllArgsConstructor
@@ -33,6 +34,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/group")
 public class GroupController {
     private final GroupService groupService;
+    private final AuthService authService;
     private final UserService userService;
     private final RoleService roleService;
     private final UserGroupRoleService userGroupRoleService;
@@ -40,7 +42,10 @@ public class GroupController {
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<GroupDTO> createGroup(@RequestBody GroupDTO groupDTO) {
 
-        String username = getAuthenticatedUsername();
+    @PostMapping("/add")
+    public ResponseEntity<Group> createGroup(@RequestBody Group group) {
+        // Buscar el usuario por userId
+        String username = authService.getAuthenticatedUsername();
         UserEntity user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -48,6 +53,13 @@ public class GroupController {
         Group group = new Group();
         group.setGroupName(groupDTO.getGroupName());
         group.setCreatedBy(user);
+
+        if (group.getBoards() != null) {
+            for (Board board : group.getBoards()) {
+                board.setGroup(group);
+                board.setCreatedBy(user);
+            }
+        }
 
         // Guardar el grupo en la base de datos
         Group createdGroup = groupService.createGroup(group);
@@ -147,15 +159,6 @@ public class GroupController {
         }
 
         return dto;
-    }
-
-    private String getAuthenticatedUsername() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
-        } else {
-            return principal.toString();
-        }
     }
 
     @GetMapping("/all")

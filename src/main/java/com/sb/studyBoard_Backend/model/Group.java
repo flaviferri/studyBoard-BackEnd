@@ -42,5 +42,6 @@ public class Group extends BaseEntity {
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "group")
+    @JsonManagedReference
     private Set<Board> boards = new HashSet<>();
 }

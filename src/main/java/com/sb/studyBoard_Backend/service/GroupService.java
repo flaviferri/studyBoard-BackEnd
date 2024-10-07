@@ -18,6 +18,7 @@ public class GroupService {
 
    @Transactional 
     public Group createGroup(Group group) {
+
         return groupRepository.save(group);
     }
 
