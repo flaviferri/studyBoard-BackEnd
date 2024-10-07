@@ -1,6 +1,5 @@
 package com.sb.studyBoard_Backend.controller;
 
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -28,7 +27,6 @@ import com.sb.studyBoard_Backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @AllArgsConstructor
 @RestController
 @RequestMapping("/group")
@@ -41,9 +39,6 @@ public class GroupController {
 
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
     public ResponseEntity<GroupDTO> createGroup(@RequestBody GroupDTO groupDTO) {
-
-    @PostMapping("/add")
-    public ResponseEntity<Group> createGroup(@RequestBody Group group) {
         // Buscar el usuario por userId
         String username = authService.getAuthenticatedUsername();
         UserEntity user = userService.findByUsername(username)
@@ -65,7 +60,7 @@ public class GroupController {
         Group createdGroup = groupService.createGroup(group);
 
         RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
-            .orElseThrow(() -> new RuntimeException("CREATED role not found"));
+                .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 
         UserGroupRole userGroupRole = new UserGroupRole();
         userGroupRole.setUser(user);
@@ -73,10 +68,8 @@ public class GroupController {
         userGroupRole.setRole(createdRole);
         userGroupRoleService.save(userGroupRole);
 
-        
         // Retornar la respuesta con el grupo creado
         GroupDTO responseDTO = convertToDTO(createdGroup);
-        System.out.println(responseDTO); 
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -88,12 +81,12 @@ public class GroupController {
         dto.setCreatedby(convertToDTO(group.getCreatedBy()));
 
         List<UserGroupRoleDTO> userGroupRoleDTOs = group.getUserGroupRoles().stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
         dto.setUserGroupRoles(userGroupRoleDTOs);
 
         return dto;
-        
+
     }
 
     private UserDTO convertToDTO(UserEntity user) {
@@ -107,11 +100,9 @@ public class GroupController {
         dto.setGithub(user.getGithubId());
         dto.setEnabled(user.isEnabled());
 
-        List<RoleDTO> roleDTOs = (user.getRoles() != null && !user.getRoles().isEmpty()) ? 
-        user.getRoles().stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList()) : 
-        new ArrayList<>();
+        List<RoleDTO> roleDTOs = (user.getRoles() != null && !user.getRoles().isEmpty()) ? user.getRoles().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList()) : new ArrayList<>();
 
         dto.setRoles(roleDTOs);
 
@@ -121,13 +112,13 @@ public class GroupController {
     private RoleDTO convertToDTO(RoleEntity role) {
         RoleDTO dto = new RoleDTO();
         dto.setId(role.getId());
-        dto.setRoleEnum(role.getRoleEnum().name()); 
+        dto.setRoleEnum(role.getRoleEnum().name());
 
-        List<PermissionDTO> permissionsDTO = (role.getPermissions() != null && !role.getPermissions().isEmpty()) ? 
-        role.getPermissions().stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList()) : 
-        new ArrayList<>();
+        List<PermissionDTO> permissionsDTO = (role.getPermissions() != null && !role.getPermissions().isEmpty())
+                ? role.getPermissions().stream()
+                        .map(this::convertToDTO)
+                        .collect(Collectors.toList())
+                : new ArrayList<>();
         dto.setPermissions(permissionsDTO);
 
         return dto;
@@ -170,8 +161,8 @@ public class GroupController {
     @GetMapping("/{id}")
     public ResponseEntity<Group> getGroupById(@PathVariable Long id) {
         Group group = groupService.getGroupById(id)
-            .orElseThrow(() -> new RuntimeException("Group not found"));
-            return ResponseEntity.ok(group);
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+        return ResponseEntity.ok(group);
     }
-    
+
 }
