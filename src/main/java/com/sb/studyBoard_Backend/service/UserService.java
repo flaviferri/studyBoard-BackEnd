@@ -49,4 +49,8 @@ public class UserService {
     public Optional<UserEntity> findById(Long userId) {
         return userRepository.findById(userId);
     }
+
+    public Optional<UserEntity> findByUsername(String email) {
+        return userRepository.findByEmail(email);
+    }
 }
