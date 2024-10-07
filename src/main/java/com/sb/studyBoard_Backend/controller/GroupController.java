@@ -2,8 +2,10 @@ package com.sb.studyBoard_Backend.controller;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.sb.studyBoard_Backend.dto.*;
 import com.sb.studyBoard_Backend.model.*;
 import com.sb.studyBoard_Backend.service.*;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.sb.studyBoard_Backend.model.RoleEntity;
 import com.sb.studyBoard_Backend.model.RoleEnum;
-import com.sb.studyBoard_Backend.dto.GroupDTO;
-import com.sb.studyBoard_Backend.dto.PermissionDTO;
-import com.sb.studyBoard_Backend.dto.RoleDTO;
-import com.sb.studyBoard_Backend.dto.UserDTO;
-import com.sb.studyBoard_Backend.dto.UserGroupRoleDTO;
 import com.sb.studyBoard_Backend.model.Group;
 import com.sb.studyBoard_Backend.model.Permission;
 import com.sb.studyBoard_Backend.model.UserEntity;
@@ -38,15 +35,12 @@ public class GroupController {
     private final UserGroupRoleService userGroupRoleService;
 
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<GroupDTO> createGroup(@RequestBody GroupDTO groupDTO) {
+    public ResponseEntity<GroupDTO> createGroup(@RequestBody Group group) {
         // Buscar el usuario por userId
         String username = authService.getAuthenticatedUsername();
         UserEntity user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Establecer el usuario como creador del grupo
-        Group group = new Group();
-        group.setGroupName(groupDTO.getGroupName());
         group.setCreatedBy(user);
 
         if (group.getBoards() != null) {
@@ -69,12 +63,12 @@ public class GroupController {
         userGroupRoleService.save(userGroupRole);
 
         // Retornar la respuesta con el grupo creado
-        GroupDTO responseDTO = convertToDTO(createdGroup);
+        GroupDTO responseDTO = groupService.convertToDTO(createdGroup, user);
 
         return ResponseEntity.ok(responseDTO);
     }
 
-    private GroupDTO convertToDTO(Group group) {
+    /*private GroupDTO convertToDTO(Group group) {
         GroupDTO dto = new GroupDTO();
         dto.setId(group.getId());
         dto.setGroupName(group.getGroupName());
@@ -150,18 +144,17 @@ public class GroupController {
         }
 
         return dto;
-    }
+    }*/
 
     @GetMapping("/all")
-    public ResponseEntity<List<Group>> getAllGroups() {
-        List<Group> groups = groupService.getAllGroups();
+    public ResponseEntity<List<GroupDTO>> getAllGroups() {
+        List<GroupDTO> groups = groupService.getAllGroups();
         return ResponseEntity.ok(groups);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Group> getGroupById(@PathVariable Long id) {
-        Group group = groupService.getGroupById(id)
-                .orElseThrow(() -> new RuntimeException("Group not found"));
+    public ResponseEntity<Optional<GroupDTO>> getGroupById(@PathVariable Long id) {
+        Optional<GroupDTO> group = groupService.findGroupDTOById(id);
         return ResponseEntity.ok(group);
     }
 
