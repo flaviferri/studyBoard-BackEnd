@@ -46,6 +46,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private boolean enabled;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     @JsonManagedReference
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
