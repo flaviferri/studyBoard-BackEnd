@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 "/api/users/login",
                                 "/api/users/register"
                         ).permitAll()
-                        .requestMatchers("/postits/**").hasAuthority("CREATE_POSTIT") // Asegúrate de que el rol esté bien definido
+                        .requestMatchers("/postits/**").hasAnyAuthority("ADMIN", "USER") // Cambia a hasAnyAuthority
                         .anyRequest().authenticated() // Todas las demás solicitudes requieren autenticación
                 )
                 .sessionManagement(sessionManager ->

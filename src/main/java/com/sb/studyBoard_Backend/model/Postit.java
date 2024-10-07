@@ -23,12 +23,16 @@ public class Postit extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String color;
+
+    @Column(nullable = false)
+    private String title;
+
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @Column(nullable = false)
-    private String title;
 
     @ManyToOne
     @JoinColumn(updatable = false, name = "created_by", nullable = false)

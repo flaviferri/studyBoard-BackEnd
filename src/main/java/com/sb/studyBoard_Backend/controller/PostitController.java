@@ -21,8 +21,8 @@ public class PostitController {
     @Autowired
     private PostitService postitService;
 
-    @PreAuthorize("hasAuthority('CREATE_POSTIT')")
-    @PostMapping("/postits")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @PostMapping("/{boardId}")
     public ResponseEntity<Postit> createPostit(@RequestBody Postit postit,
                                                @PathVariable Long boardId,
                                                Authentication authentication) {
@@ -32,7 +32,6 @@ public class PostitController {
 
             Postit createdPostit = postitService.createPostit(postit, userId, boardId);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPostit);
-
         } catch (AccessDeniedException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (Exception e) {

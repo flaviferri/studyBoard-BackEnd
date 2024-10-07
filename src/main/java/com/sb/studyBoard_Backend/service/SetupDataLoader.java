@@ -44,7 +44,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-        // Crear permisos
+
         PermissionEntity createPostitPermission = createPermissionIfNotFound("CREATE_POSTIT");
         PermissionEntity readPostitPermission = createPermissionIfNotFound("READ_POSTIT");
         PermissionEntity updatePostitPermission = createPermissionIfNotFound("UPDATE_POSTIT");
