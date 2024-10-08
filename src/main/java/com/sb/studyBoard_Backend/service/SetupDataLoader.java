@@ -44,7 +44,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-
         PermissionEntity createPostitPermission = createPermissionIfNotFound("CREATE_POSTIT");
         PermissionEntity readPostitPermission = createPermissionIfNotFound("READ_POSTIT");
         PermissionEntity updatePostitPermission = createPermissionIfNotFound("UPDATE_POSTIT");
@@ -73,8 +72,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 createBoard,
                 deleteBoard,
                 updateBoard,
-                refactorPermission
-        ));
+                refactorPermission));
 
         RoleEntity roleCreated = createRoleIfNotFound(RoleEnum.CREATED, Arrays.asList(createBoard));
 
@@ -85,8 +83,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 deletePostitPermission,
                 readBoard,
                 readGroup,
-                createGroup
-        ));
+                createGroup));
 
         // Crear usuario administrador si no existe
         if (!userRepository.findByEmail("testadmin@test.com").isPresent()) {

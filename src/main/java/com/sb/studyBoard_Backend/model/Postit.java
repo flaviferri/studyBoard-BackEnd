@@ -39,11 +39,8 @@ public class Postit extends BaseEntity {
     @JsonBackReference
     private Board board;
 
-
-    // @Column(nullable = false)
-    // private String color;
-
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
     @JsonIgnore
     private UserEntity createdBy;

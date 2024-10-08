@@ -8,9 +8,8 @@ import java.util.List;
 public interface IPostitService {
 
     Postit createPostit(Postit postit, Long userId, Long boardId) throws AccessDeniedException;
+
     List<Postit> getAllPostitsByBoardId(Long boardId) throws AccessDeniedException;
 
-
-
-
+    void deletePostit(Long id, Long userId) throws AccessDeniedException;
 }
