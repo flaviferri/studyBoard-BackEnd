@@ -47,8 +47,8 @@ public class SecurityConfig {
                                 "/api/users/login",
                                 "/api/users/register"
                         ).permitAll()
-                        .requestMatchers("/postits/**").hasAnyAuthority("ADMIN", "USER") // Cambia a hasAnyAuthority
-                        .anyRequest().authenticated() // Todas las demás solicitudes requieren autenticación
+                        .requestMatchers("/postits/**").hasAnyAuthority("ADMIN", "USER")
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
                         sessionManager

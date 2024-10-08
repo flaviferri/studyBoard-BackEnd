@@ -29,7 +29,6 @@ public class PostitController {
         try {
             UserEntity user = (UserEntity) authentication.getPrincipal();
             Long userId = user.getId();
-
             Postit createdPostit = postitService.createPostit(postit, userId, boardId);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPostit);
         } catch (AccessDeniedException ex) {
@@ -40,8 +39,7 @@ public class PostitController {
     }
 
 
-    // Obtener un Postit por ID
-    @PreAuthorize("hasAuthority('READ_POSTIT')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/{id}")
     public ResponseEntity<Postit> getPostit(@PathVariable Long id, Authentication authentication) {
         try {
