@@ -42,19 +42,6 @@ public class PostitService implements IPostitService {
     }
 
     @Override
-    public Postit getPostitById(Long id, Long userId) throws AccessDeniedException {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (hasPermission(user, "READ_POSTIT")) {
-            return postitRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Postit not found"));
-        } else {
-            throw new AccessDeniedException("No tienes permiso para leer postits.");
-        }
-    }
-
-    @Override
     public List<Postit> getAllPostitsByBoardId(Long boardId) {
         return postitRepository.findAllByBoardId(boardId);
     }

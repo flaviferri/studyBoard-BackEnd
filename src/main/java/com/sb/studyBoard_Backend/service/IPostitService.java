@@ -11,11 +11,5 @@ public interface IPostitService {
 
     List<Postit> getAllPostitsByBoardId(Long boardId) throws AccessDeniedException;
 
-    Postit getPostitById(Long id, Long userId) throws AccessDeniedException; // Agregar userId
-    /*
-     * Postit updatePostit(Long id, Postit postit, Long userId) throws
-     * AccessDeniedException;
-     */
-
     void deletePostit(Long id, Long userId) throws AccessDeniedException;
 }
