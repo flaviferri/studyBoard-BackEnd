@@ -51,6 +51,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
