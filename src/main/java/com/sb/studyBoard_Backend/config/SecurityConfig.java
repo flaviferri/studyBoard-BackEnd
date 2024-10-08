@@ -45,7 +45,8 @@ public class SecurityConfig {
                                 "/home",
                                 "/auth/github/callback",
                                 "/api/users/login",
-                                "/api/users/register"
+                                "/api/users/register",
+                                "/error"
                         ).permitAll()
                         .requestMatchers("/postits/**").hasAnyAuthority("ADMIN", "USER")
                         .anyRequest().authenticated()

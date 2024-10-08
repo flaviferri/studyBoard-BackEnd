@@ -4,5 +4,9 @@ import com.sb.studyBoard_Backend.model.Postit;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface PostitRepository extends JpaRepository<Postit, Long> {
+    List<Postit> findAllByBoardId(Long boardId);
 }
+

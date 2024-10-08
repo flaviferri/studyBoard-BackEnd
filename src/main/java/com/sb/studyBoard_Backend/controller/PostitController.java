@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -40,33 +41,15 @@ public class PostitController {
 
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    @GetMapping("/{id}")
-    public ResponseEntity<Postit> getPostit(@PathVariable Long id, Authentication authentication) {
+    @GetMapping("/board/{boardId}")
+    public ResponseEntity<List<Postit>> getAllPostitsByBoardId(@PathVariable Long boardId) {
         try {
-            UserEntity user = (UserEntity) authentication.getPrincipal();
-            Long userId = user.getId();
-            Postit postit = postitService.getPostitById(id, userId);
-            return ResponseEntity.ok(postit);
-        } catch (AccessDeniedException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            List<Postit> postits = postitService.getAllPostitsByBoardId(boardId);
+            return ResponseEntity.ok(postits);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    // Eliminar un Postit
-    @PreAuthorize("hasAuthority('DELETE_POSTIT')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePostit(@PathVariable Long id, Authentication authentication) {
-        try {
-            UserEntity user = (UserEntity) authentication.getPrincipal();
-            Long userId = user.getId();
-            postitService.deletePostit(id, userId);
-            return ResponseEntity.noContent().build();
-        } catch (AccessDeniedException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
+
 }

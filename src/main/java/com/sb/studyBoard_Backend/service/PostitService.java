@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @Service
 public class PostitService implements IPostitService {
@@ -40,40 +41,18 @@ public class PostitService implements IPostitService {
         }
     }
 
-    @Override
-    public Postit getPostitById(Long id, Long userId) throws AccessDeniedException {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        if (hasPermission(user, "READ_POSTIT")) {
-            return postitRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Postit not found"));
-        } else {
-            throw new AccessDeniedException("No tienes permiso para leer postits.");
-        }
-    }
-
 
     @Override
-    public void deletePostit(Long id, Long userId) throws AccessDeniedException {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public List<Postit> getAllPostitsByBoardId(Long boardId) {
+        return postitRepository.findAllByBoardId(boardId);  }
 
-        if (hasPermission(user, "DELETE_POSTIT")) {
-
-            Postit postit = postitRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Postit not found"));
-
-            postitRepository.delete(postit);
-        } else {
-            throw new AccessDeniedException("No tienes permiso para eliminar postits.");
-        }
-    }
 
     public boolean hasPermission(UserEntity user, String permissionName) {
         return user.getRoles().stream()
                 .flatMap(role -> role.getPermissionsEntity().stream())
                 .anyMatch(permission -> permission.getName().equals(permissionName));
     }
+
+
 
 }
