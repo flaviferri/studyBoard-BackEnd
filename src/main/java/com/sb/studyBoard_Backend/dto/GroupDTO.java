@@ -1,8 +1,6 @@
 package com.sb.studyBoard_Backend.dto;
 
-import java.util.List;
-
-import com.sb.studyBoard_Backend.model.Board;
+import java.util.Set;
 
 import lombok.*;
 
@@ -13,7 +11,7 @@ import lombok.*;
 public class GroupDTO {
     private Long id;
     private String groupName;
-    private UserDTO createdby;
-    private List<Board> boards;
-    private List<UserGroupRoleDTO> userGroupRoles;
+    private CreatedByDTO createdBy;
+    private Set<BoardDTO> boards;
+    private Boolean isCreator;
 }

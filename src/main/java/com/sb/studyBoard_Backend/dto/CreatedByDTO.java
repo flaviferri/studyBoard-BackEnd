@@ -5,21 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    
+public class CreatedByDTO {
     private Long id;
-    private String name;
-    private String email;
-    private String github;
-    private String avatarUrl;
-    private boolean enabled;
-
-    private List<RoleDTO> roles;
-
 }
