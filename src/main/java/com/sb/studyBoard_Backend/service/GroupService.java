@@ -6,10 +6,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.sb.studyBoard_Backend.dto.*;
-import com.sb.studyBoard_Backend.model.UserEntity;
+import com.sb.studyBoard_Backend.model.*;
 import org.springframework.stereotype.Service;
 
-import com.sb.studyBoard_Backend.model.Group;
 import com.sb.studyBoard_Backend.repository.GroupRepository;
 
 import jakarta.transaction.Transactional;
@@ -21,11 +20,33 @@ public class GroupService {
     private GroupRepository groupRepository;
     private AuthService authService;
     private UserService userService;
+    private RoleService roleService;
+    private UserGroupRoleService userGroupRoleService;
 
    @Transactional 
-    public Group createGroup(Group group) {
+    public GroupDTO createGroup(Group group) {
+       String username = authService.getAuthenticatedUsername();
+       UserEntity user = userService.findByUsername(username)
+               .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return groupRepository.save(group);
+       group.setCreatedBy(user);
+
+       if (group.getBoards() != null) {
+           for (Board board : group.getBoards()) {
+               board.setGroup(group);
+               board.setCreatedBy(user);
+           }
+       }
+       Group createdGroup = groupRepository.save(group);/**/
+       RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
+               .orElseThrow(() -> new RuntimeException("CREATED role not found"));
+
+       UserGroupRole userGroupRole = new UserGroupRole();
+       userGroupRole.setUser(user);
+       userGroupRole.setGroup(createdGroup);
+       userGroupRole.setRole(createdRole);
+       userGroupRoleService.save(userGroupRole);
+       return convertToDTO(createdGroup, user);
     }
 
     public List<GroupDTO> getAllGroups() {
