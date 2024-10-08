@@ -3,6 +3,7 @@ package com.sb.studyBoard_Backend.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -26,9 +27,11 @@ public class Group extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
+    @JsonIgnore
     private UserEntity createdBy;
 
     @OneToMany(mappedBy = "group")
+    @JsonIgnore
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)

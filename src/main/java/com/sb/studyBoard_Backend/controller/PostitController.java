@@ -4,22 +4,15 @@ import com.sb.studyBoard_Backend.model.Postit;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.service.PostitService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.AccessDeniedException;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-@RestController
-@RequestMapping("/postits")
-public class PostitController {
-
-    @Autowired
-    private PostitService postitService;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @PostMapping("/{boardId}")
@@ -67,4 +60,3 @@ public class PostitController {
         }
     }
 
-}

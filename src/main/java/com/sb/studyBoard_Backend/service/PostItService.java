@@ -28,39 +28,12 @@ public class PostItService {
         // Buscar el board por su ID
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("El board no existe."));
+
+        // Asignar el board y el usuario creador al postit
         postit.setBoard(board);
         postit.setCreatedBy(user);
 
         return postitRepository.save(postit);
     }
 
-    @Override
-    public List<Postit> getAllPostitsByBoardId(Long boardId) {
-        return postitRepository.findAllByBoardId(boardId);
-    }
-   
-    @Override
-    public void deletePostit(Long id, Long userId) throws AccessDeniedException {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Postit postit = postitRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Postit not found"));
-
-        if (!postit.getCreatedBy().getId().equals(userId)) {
-            throw new AccessDeniedException("No puedes eliminar un post-it que no has creado.");
-        }
-
-        if (hasPermission(user, "DELETE_POSTIT")) {
-            postitRepository.delete(postit);
-        } else {
-            throw new AccessDeniedException("No tienes permiso para eliminar post-its.");
-        }
-    }
-  
-    public boolean hasPermission(UserEntity user, String permissionName) {
-        return user.getRoles().stream()
-                .flatMap(role -> role.getPermissionsEntity().stream())
-                .anyMatch(permission -> permission.getName().equals(permissionName));
-    }
 }

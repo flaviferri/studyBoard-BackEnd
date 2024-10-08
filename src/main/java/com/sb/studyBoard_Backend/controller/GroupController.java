@@ -32,4 +32,5 @@ public class GroupController {
         Optional<GroupDTO> group = groupService.findGroupDTOById(id);
         return ResponseEntity.ok(group);
     }
+
 }

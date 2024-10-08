@@ -23,30 +23,30 @@ public class GroupService {
     private RoleService roleService;
     private UserGroupRoleService userGroupRoleService;
 
-    @Transactional
+   @Transactional 
     public GroupDTO createGroup(Group group) {
-        String username = authService.getAuthenticatedUsername();
-        UserEntity user = userService.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+       String username = authService.getAuthenticatedUsername();
+       UserEntity user = userService.findByUsername(username)
+               .orElseThrow(() -> new RuntimeException("User not found"));
 
-        group.setCreatedBy(user);
+       group.setCreatedBy(user);
 
-        if (group.getBoards() != null) {
-            for (Board board : group.getBoards()) {
-                board.setGroup(group);
-                board.setCreatedBy(user);
-            }
-        }
-        Group createdGroup = groupRepository.save(group);/**/
-        RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
-                .orElseThrow(() -> new RuntimeException("CREATED role not found"));
+       if (group.getBoards() != null) {
+           for (Board board : group.getBoards()) {
+               board.setGroup(group);
+               board.setCreatedBy(user);
+           }
+       }
+       Group createdGroup = groupRepository.save(group);/**/
+       RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
+               .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 
-        UserGroupRole userGroupRole = new UserGroupRole();
-        userGroupRole.setUser(user);
-        userGroupRole.setGroup(createdGroup);
-        userGroupRole.setRole(createdRole);
-        userGroupRoleService.save(userGroupRole);
-        return convertToDTO(createdGroup, user);
+       UserGroupRole userGroupRole = new UserGroupRole();
+       userGroupRole.setUser(user);
+       userGroupRole.setGroup(createdGroup);
+       userGroupRole.setRole(createdRole);
+       userGroupRoleService.save(userGroupRole);
+       return convertToDTO(createdGroup, user);
     }
 
     public List<GroupDTO> getAllGroups() {
@@ -94,5 +94,5 @@ public class GroupService {
 
         return dto;
     }
-
 }
+

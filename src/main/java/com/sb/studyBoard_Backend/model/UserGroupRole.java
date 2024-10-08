@@ -25,7 +25,8 @@ public class UserGroupRole extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JsonBackReference
+    // @JsonBackReference
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
@@ -36,5 +37,6 @@ public class UserGroupRole extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "role_id")
+    @JsonIgnore
     private RoleEntity role;
 }

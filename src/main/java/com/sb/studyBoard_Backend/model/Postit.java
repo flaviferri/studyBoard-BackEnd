@@ -1,6 +1,8 @@
 package com.sb.studyBoard_Backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,11 +34,14 @@ public class Postit extends BaseEntity {
     private String title;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "board_id")
+    @JsonBackReference
     private Board board;
 
     @ManyToOne
     @JsonIgnore
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
+    @JsonIgnore
     private UserEntity createdBy;
 }

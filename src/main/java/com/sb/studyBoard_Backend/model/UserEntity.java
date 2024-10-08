@@ -47,6 +47,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
+    @JsonManagedReference
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
