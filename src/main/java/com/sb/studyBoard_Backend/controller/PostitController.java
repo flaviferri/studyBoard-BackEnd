@@ -2,27 +2,38 @@ package com.sb.studyBoard_Backend.controller;
 
 import com.sb.studyBoard_Backend.model.Postit;
 import com.sb.studyBoard_Backend.model.UserEntity;
+
+
 import com.sb.studyBoard_Backend.service.PostitService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import java.util.NoSuchElementException;
+
+@RestController
+@RequestMapping("/postits")
+public class PostitController {
+
+    @Autowired
+    private PostitService postitService;
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @PostMapping("/{boardId}")
     public ResponseEntity<Postit> createPostit(@RequestBody Postit postit,
-            @PathVariable Long boardId,
-            Authentication authentication) {
+                                               @PathVariable Long boardId,
+                                               Authentication authentication) {
         try {
             UserEntity user = (UserEntity) authentication.getPrincipal();
             Long userId = user.getId();
-            Postit createdPostit = postitService.createPostit(postit, userId, boardId);
+            Postit createdPostit = postitService.createPostit(postit, boardId);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPostit);
         } catch (AccessDeniedException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -42,6 +53,7 @@ import org.springframework.web.bind.annotation.RestController;
         }
     }
 
+
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePostit(@PathVariable Long id, Authentication authentication) {
@@ -59,4 +71,5 @@ import org.springframework.web.bind.annotation.RestController;
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+}
 
