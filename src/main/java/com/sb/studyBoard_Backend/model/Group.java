@@ -26,9 +26,11 @@ public class Group extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
+    @JsonIgnore
     private UserEntity createdBy;
 
     @OneToMany(mappedBy = "group")
+    @JsonIgnore
     private Set<UserGroupRole> userGroupRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
