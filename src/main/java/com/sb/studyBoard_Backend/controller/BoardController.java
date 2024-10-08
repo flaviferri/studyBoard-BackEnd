@@ -15,13 +15,13 @@ import java.util.Set;
 public class BoardController {
     private final BoardService boardService;
 
-    /*@PreAuthorize("hasAuthority('READ_GROUP')")*/
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("/{groupId}/getAll")
     public Set<Board> getAllBoards(@PathVariable Long groupId) {
         return boardService.getAllBoards(groupId);
     }
 
-    /*@PreAuthorize("hasAuthority('CREATE_BOARD')")*/
+    @PreAuthorize("hasAnyAuthority('ADMIN','CREATED')")
     @PostMapping("/{groupId}/add")
     public ResponseEntity<Object> addBoard(@PathVariable Long groupId, @RequestBody Board board) {
         return boardService.addBoard(board, groupId);

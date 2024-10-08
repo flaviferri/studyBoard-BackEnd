@@ -1,5 +1,6 @@
 package com.sb.studyBoard_Backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,18 +27,24 @@ public class Postit extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String color;
+
+    @Column(nullable = false)
+    private String title;
+
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "board_id")
     @JsonBackReference
     private Board board;
 
-    @Column(nullable = false)
-    private String title;
 
     // @Column(nullable = false)
     // private String color;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
     @JsonIgnore
     private UserEntity createdBy;
