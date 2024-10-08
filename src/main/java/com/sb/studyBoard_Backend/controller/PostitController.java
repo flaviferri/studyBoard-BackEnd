@@ -49,8 +49,7 @@ public class PostitController {
         }
     }
 
-    // Eliminar un Postit
-    @PreAuthorize("hasAuthority('DELETE_POSTIT')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePostit(@PathVariable Long id, Authentication authentication) {
         try {
@@ -63,8 +62,9 @@ public class PostitController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
-            e.printStackTrace(); // Para imprimir el error en los logs y depurarlo
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 }

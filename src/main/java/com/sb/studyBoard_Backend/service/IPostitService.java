@@ -18,5 +18,4 @@ public interface IPostitService {
      */
 
     void deletePostit(Long id, Long userId) throws AccessDeniedException;
-
 }

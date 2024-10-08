@@ -65,4 +65,26 @@ public class PostitService implements IPostitService {
                 .anyMatch(permission -> permission.getName().equals(permissionName));
     }
 
+    @Override
+    public void deletePostit(Long id, Long userId) throws AccessDeniedException {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Postit postit = postitRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Postit not found"));
+
+        // Verificamos si el usuario que está intentando eliminar el post-it es el
+        // creador
+        if (!postit.getCreatedBy().getId().equals(userId)) {
+            throw new AccessDeniedException("No puedes eliminar un post-it que no has creado.");
+        }
+
+        // Verificamos que el usuario tenga permisos para eliminar el post-it
+        if (hasPermission(user, "DELETE_POSTIT")) {
+            postitRepository.delete(postit);
+        } else {
+            throw new AccessDeniedException("No tienes permiso para eliminar post-its.");
+        }
+    }
+
 }
