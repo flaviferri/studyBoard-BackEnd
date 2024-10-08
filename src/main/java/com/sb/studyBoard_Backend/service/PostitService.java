@@ -4,55 +4,36 @@ import com.sb.studyBoard_Backend.model.Board;
 import com.sb.studyBoard_Backend.model.Postit;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.BoardRepository;
-import com.sb.studyBoard_Backend.repository.PostitRepository;
-import com.sb.studyBoard_Backend.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sb.studyBoard_Backend.repository.PostItRepository;
+import com.sb.studyBoard_Backend.exceptions.BoardNotFoundException;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
-import java.util.List;
 
 @Service
-public class PostitService implements IPostitService {
+@RequiredArgsConstructor
+public class PostItService {
 
-    @Autowired
-    private PostitRepository postitRepository;
+    private final PostItRepository postitRepository;
+    private final BoardRepository boardRepository;
+    private final AuthService authService;
+    private final UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
+    public Postit createPostit(Postit postit, Long boardId) {
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-    @Autowired
-    private BoardRepository boardRepository;
-
-    @Override
-    public Postit createPostit(Postit postit, Long userId, Long boardId) throws AccessDeniedException {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+        // Buscar el board por su ID
         Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new RuntimeException("Board not found"));
+                .orElseThrow(() -> new BoardNotFoundException("El board no existe."));
 
-        if (hasPermission(user, "CREATE_POSTIT")) {
-            postit.setCreatedBy(user);
-            postit.setBoard(board);
-            return postitRepository.save(postit);
-        } else {
-            throw new AccessDeniedException("No tienes permiso para crear postits.");
-        }
+        // Asignar el board y el usuario creador al postit
+        postit.setBoard(board);
+        postit.setCreatedBy(user);
+
+        return postitRepository.save(postit);
     }
-
-
-    @Override
-    public List<Postit> getAllPostitsByBoardId(Long boardId) {
-        return postitRepository.findAllByBoardId(boardId);  }
-
-
-    public boolean hasPermission(UserEntity user, String permissionName) {
-        return user.getRoles().stream()
-                .flatMap(role -> role.getPermissionsEntity().stream())
-                .anyMatch(permission -> permission.getName().equals(permissionName));
-    }
-
-
 
 }
