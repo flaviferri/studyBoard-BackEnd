@@ -41,6 +41,16 @@ public class GroupService {
        RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
                .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 
+       boolean hasRoleCreated = user.getRoles().stream()
+               .anyMatch(role -> role.getRoleEnum() == RoleEnum.CREATED);
+
+       if (!hasRoleCreated) {
+           user.getRoles().add(createdRole);
+           userGroupRoleService.saveUser(user);
+       } else {
+           System.out.println("El usuario ya tiene el rol CREATED.");
+       }
+
        UserGroupRole userGroupRole = new UserGroupRole();
        userGroupRole.setUser(user);
        userGroupRole.setGroup(createdGroup);

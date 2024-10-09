@@ -42,6 +42,5 @@ public class Postit extends BaseEntity {
     @ManyToOne
     @JsonIgnore
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
-    @JsonIgnore
     private UserEntity createdBy;
 }
