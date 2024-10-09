@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,9 +43,12 @@ public class Board extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(updatable = false, name = "created_by", nullable = false)
+    @JsonIgnore
     private UserEntity createdBy;
 
     @OneToMany(mappedBy = "board")
+    @JsonIgnore
+    @JsonManagedReference
     private Set<Postit> postits = new HashSet<>();
 
 }

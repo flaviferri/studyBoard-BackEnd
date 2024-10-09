@@ -24,7 +24,7 @@ public class UserService {
     public UserEntity saveOrUpdateUser(Map<String, Object> userAttributes) {
         String githubId = userAttributes.get("id").toString();
         String name = (String) userAttributes.get("name");
-        String email = (String) userAttributes.get("email");
+        String email = userAttributes.get("id").toString();
         String avatarUrl = (String) userAttributes.get("avatar_url");
 
         Optional<UserEntity> existingUser = userRepository.findByGithubId(githubId);
