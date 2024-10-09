@@ -12,8 +12,6 @@ import java.util.Optional;
 public interface IGroupService {
         GroupDTO createGroup(Group group);
         GroupDTO joinGroup(Long groupId);
-        List<Group> findByUserId(Long userId);
-        List<Group> findByCreatedBy_Id(Long userId);
         List<GroupDTO> getAllGroups();
         List<GroupDTO> getUserGroups();
         Optional<Group> getGroupById(Long id);

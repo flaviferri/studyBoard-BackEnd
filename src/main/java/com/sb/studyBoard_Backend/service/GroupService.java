@@ -88,16 +88,6 @@ public class GroupService implements IGroupService {
         return convertToDTO(group, user);
     }
 
-
-    @Override
-    public List<Group> findByUserId(Long userId) {
-        return groupRepository.findByCreatedBy_Id(userId);
-    }
-    @Override
-    public List<Group> findByCreatedBy_Id(Long userId) {
-        return groupRepository.findByCreatedBy_Id(userId);
-    }
-
     public List<GroupDTO> getAllGroups() {
         String username = authService.getAuthenticatedUsername();
         UserEntity user = userService.findByUsername(username)
