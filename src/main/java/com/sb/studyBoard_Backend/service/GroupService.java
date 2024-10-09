@@ -1,3 +1,4 @@
+
 package com.sb.studyBoard_Backend.service;
 
 import java.util.List;
@@ -23,40 +24,40 @@ public class GroupService implements IGroupService {
     private RoleService roleService;
     private UserGroupRoleService userGroupRoleService;
 
-   @Transactional 
+    @Transactional
     public GroupDTO createGroup(Group group) {
-       String username = authService.getAuthenticatedUsername();
-       UserEntity user = userService.findByUsername(username)
-               .orElseThrow(() -> new RuntimeException("User not found"));
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-       group.setCreatedBy(user);
+        group.setCreatedBy(user);
 
-       if (group.getBoards() != null) {
-           for (Board board : group.getBoards()) {
-               board.setGroup(group);
-               board.setCreatedBy(user);
-           }
-       }
-       Group createdGroup = groupRepository.save(group);/**/
-       RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
-               .orElseThrow(() -> new RuntimeException("CREATED role not found"));
+        if (group.getBoards() != null) {
+            for (Board board : group.getBoards()) {
+                board.setGroup(group);
+                board.setCreatedBy(user);
+            }
+        }
+        Group createdGroup = groupRepository.save(group);/**/
+        RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
+                .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 
-       boolean hasRoleCreated = user.getRoles().stream()
-               .anyMatch(role -> role.getRoleEnum() == RoleEnum.CREATED);
+        boolean hasRoleCreated = user.getRoles().stream()
+                .anyMatch(role -> role.getRoleEnum() == RoleEnum.CREATED);
 
-       if (!hasRoleCreated) {
-           user.getRoles().add(createdRole);
-           userGroupRoleService.saveUser(user);
-       } else {
-           System.out.println("El usuario ya tiene el rol CREATED.");
-       }
+        if (!hasRoleCreated) {
+            user.getRoles().add(createdRole);
+            userGroupRoleService.saveUser(user);
+        } else {
+            System.out.println("El usuario ya tiene el rol CREATED.");
+        }
 
-       UserGroupRole userGroupRole = new UserGroupRole();
-       userGroupRole.setUser(user);
-       userGroupRole.setGroup(createdGroup);
-       userGroupRole.setRole(createdRole);
-       userGroupRoleService.save(userGroupRole);
-       return convertToDTO(createdGroup, user);
+        UserGroupRole userGroupRole = new UserGroupRole();
+        userGroupRole.setUser(user);
+        userGroupRole.setGroup(createdGroup);
+        userGroupRole.setRole(createdRole);
+        userGroupRoleService.save(userGroupRole);
+        return convertToDTO(createdGroup, user);
     }
 
     public List<GroupDTO> getAllGroups() {
@@ -96,6 +97,7 @@ public class GroupService implements IGroupService {
                     BoardDTO boardDTO = new BoardDTO();
                     boardDTO.setTitle(board.getTitle());
                     boardDTO.setColor(board.getColor());
+                    boardDTO.setId(board.getId());
                     return boardDTO;
                 })
                 .collect(Collectors.toSet()));
@@ -105,4 +107,3 @@ public class GroupService implements IGroupService {
         return dto;
     }
 }
-
