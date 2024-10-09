@@ -33,6 +33,9 @@ public class Postit extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "TEXT")
+    private String textContent;
+
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "board_id")
