@@ -19,7 +19,8 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class BoardService {
+public class BoardService implements IBoardService {
+
 
     private final BoardRepository boardRepository;
     private final GroupService groupService;
