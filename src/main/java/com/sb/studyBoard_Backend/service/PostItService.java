@@ -11,9 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-public class PostitService implements IPostitService {
+public class PostItService implements IPostitService {
 
     private final PostItRepository postitRepository;
     private final BoardRepository boardRepository;

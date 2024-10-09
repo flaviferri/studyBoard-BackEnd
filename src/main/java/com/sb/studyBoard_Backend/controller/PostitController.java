@@ -4,7 +4,7 @@ import com.sb.studyBoard_Backend.model.Postit;
 import com.sb.studyBoard_Backend.model.UserEntity;
 
 
-import com.sb.studyBoard_Backend.service.PostitService;
+import com.sb.studyBoard_Backend.service.PostItService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
 public class PostitController {
 
     @Autowired
-    private PostitService postitService;
+    private PostItService postitService;
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @PostMapping("/{boardId}")

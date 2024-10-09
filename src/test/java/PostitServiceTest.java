@@ -1,8 +1,8 @@
 import com.sb.studyBoard_Backend.model.*;
 import com.sb.studyBoard_Backend.repository.BoardRepository;
-import com.sb.studyBoard_Backend.repository.PostitRepository;
+import com.sb.studyBoard_Backend.repository.PostItRepository;
 import com.sb.studyBoard_Backend.repository.UserRepository;
-import com.sb.studyBoard_Backend.service.PostitService;
+import com.sb.studyBoard_Backend.service.PostItService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class PostitServiceTest {
 
     @InjectMocks
-    private PostitService postitService;
+    private PostItService postitService;
 
     @Mock
     private UserRepository userRepository;
@@ -29,7 +29,7 @@ public class PostitServiceTest {
     private BoardRepository boardRepository;
 
     @Mock
-    private PostitRepository postitRepository;
+    private PostItRepository postitRepository;
 
     @BeforeEach
     public void setUp() {
@@ -60,7 +60,7 @@ public class PostitServiceTest {
 
         when(postitRepository.save(any(Postit.class))).thenReturn(postit);
 
-        Postit createdPostit = postitService.createPostit(postit, 1L, 1L);
+        Postit createdPostit = postitService.createPostit(postit,  1L);
 
         assertNotNull(createdPostit);
         assertEquals(mockUser, createdPostit.getCreatedBy());
