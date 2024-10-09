@@ -1,5 +1,6 @@
 package com.sb.studyBoard_Backend.service;
 
+import com.sb.studyBoard_Backend.config.jwt.JwtService;
 import com.sb.studyBoard_Backend.dto.AuthRequest;
 import com.sb.studyBoard_Backend.dto.RegisterRequest;
 import com.sb.studyBoard_Backend.exceptions.EmailExistsException;

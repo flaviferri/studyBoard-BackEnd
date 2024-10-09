@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Service
-public class GroupService {
+public class GroupService implements IGroupService {
     private GroupRepository groupRepository;
     private AuthService authService;
     private UserService userService;
