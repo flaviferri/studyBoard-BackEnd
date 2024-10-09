@@ -1,3 +1,4 @@
+
 package com.sb.studyBoard_Backend.service;
 
 import java.util.List;
@@ -37,7 +38,9 @@ public class GroupService implements IGroupService {
                 board.setCreatedBy(user);
             }
         }
+
         Group createdGroup = groupRepository.save(group);
+
         RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
                 .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 
@@ -57,6 +60,7 @@ public class GroupService implements IGroupService {
         userGroupRole.setRole(createdRole);
         userGroupRoleService.save(userGroupRole);
         return convertToDTO(createdGroup, user);
+
     }
 
     @Transactional
@@ -85,6 +89,8 @@ public class GroupService implements IGroupService {
         userGroupRoleService.save(userGroupRole);
 
         return convertToDTO(group, user);
+
+
     }
 
     public List<GroupDTO> getAllGroups() {
@@ -149,7 +155,4 @@ public class GroupService implements IGroupService {
         return dto;
     }
 }
-
-
-
 

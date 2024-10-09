@@ -8,6 +8,7 @@ import com.sb.studyBoard_Backend.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -21,6 +22,7 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final AuthService authService;
 
     public UserEntity saveOrUpdateUser(Map<String, Object> userAttributes) {
         String githubId = userAttributes.get("id").toString();
@@ -53,5 +55,28 @@ public class UserService implements IUserService {
 
     public Optional<UserEntity> findByUsername(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public UserEntity getAuthenticatedUser() {
+        String username = authService.getAuthenticatedUsername(); 
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    }
+
+    public UserEntity updateUserAvatar(String avatarUrl) {
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        user.setAvatarUrl(avatarUrl);
+        return userRepository.save(user);
+    }
+
+    public UserEntity updateUserName(String newName) {
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
+        user.setName(newName);
+        return userRepository.save(user);
     }
 }
