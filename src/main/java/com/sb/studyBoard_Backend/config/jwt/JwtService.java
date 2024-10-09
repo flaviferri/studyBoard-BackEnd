@@ -1,4 +1,4 @@
-package com.sb.studyBoard_Backend.service;
+package com.sb.studyBoard_Backend.config.jwt;
 
 import com.sb.studyBoard_Backend.model.UserEntity;
 

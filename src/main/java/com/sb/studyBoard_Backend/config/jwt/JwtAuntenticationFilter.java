@@ -1,4 +1,4 @@
-package com.sb.studyBoard_Backend.config;
+package com.sb.studyBoard_Backend.config.jwt;
 import java.io.IOException;
 
 import org.springframework.http.HttpHeaders;
@@ -10,8 +10,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.sb.studyBoard_Backend.service.JwtService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
