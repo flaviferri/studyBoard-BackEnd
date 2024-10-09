@@ -10,6 +10,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -65,5 +67,12 @@ public class PostItController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/date/{groupId}")
+    public ResponseEntity<List<Postit>> getAllPostitsByBoardId(@PathVariable Long groupId, @RequestParam LocalDate date) {
+        return postitService.getPostItsByDate(groupId, date);
     }
 }

@@ -16,13 +16,13 @@ public class BoardController {
     private final BoardService boardService;
 
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @GetMapping("/{groupId}/getAll")
+    @GetMapping("/getAll/{groupId}")
     public Set<Board> getAllBoards(@PathVariable Long groupId) {
         return boardService.getAllBoards(groupId);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN','CREATED')")
-    @PostMapping("/{groupId}/add")
+    @PostMapping("/add/{groupId}")
     public ResponseEntity<Object> addBoard(@PathVariable Long groupId, @RequestBody Board board) {
         return boardService.addBoard(board, groupId);
     }

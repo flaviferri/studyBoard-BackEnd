@@ -1,16 +1,25 @@
 package com.sb.studyBoard_Backend.service;
 
 import com.sb.studyBoard_Backend.exceptions.BoardNotFoundException;
+import com.sb.studyBoard_Backend.exceptions.GroupNotFoundException;
+import com.sb.studyBoard_Backend.exceptions.NoPostItsOnSelectedDate;
 import com.sb.studyBoard_Backend.model.Board;
+import com.sb.studyBoard_Backend.model.Group;
 import com.sb.studyBoard_Backend.model.Postit;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.BoardRepository;
+import com.sb.studyBoard_Backend.repository.GroupRepository;
 import com.sb.studyBoard_Backend.repository.PostItRepository;
 import com.sb.studyBoard_Backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +27,7 @@ public class PostItService implements IPostitService {
 
     private final PostItRepository postitRepository;
     private final BoardRepository boardRepository;
+    private final GroupRepository groupRepository;
     private final AuthService authService;
     private final UserService userService;
     private final UserRepository userRepository;
@@ -66,5 +76,23 @@ public class PostItService implements IPostitService {
         return user.getRoles().stream()
                 .flatMap(role -> role.getPermissionsEntity().stream())
                 .anyMatch(permission -> permission.getName().equals(permissionName));
+    }
+
+    @Override
+    public ResponseEntity<List<Postit>> getPostItsByDate(Long groupId, LocalDate date) {
+        List<Postit> postIts = new ArrayList<>();
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new GroupNotFoundException("No se encontró el grupo."));
+        Set<Board> boards = group.getBoards();
+        for (Board board : boards) {
+            List<Postit> boardPostIts = postitRepository.findByBoardAndDate(board, date);
+            postIts.addAll(boardPostIts);
+        }
+
+        if (postIts.isEmpty()) {
+            throw new NoPostItsOnSelectedDate("No hay Post-Its para la fecha seleccionada.");
+        }
+
+        return new ResponseEntity<>(postIts, HttpStatus.OK);
     }
 }
