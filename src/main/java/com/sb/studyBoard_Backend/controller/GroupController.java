@@ -3,6 +3,7 @@ package com.sb.studyBoard_Backend.controller;
 import java.util.List;
 import java.util.Optional;
 import com.sb.studyBoard_Backend.dto.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.sb.studyBoard_Backend.model.Group;
@@ -33,4 +34,15 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
 
+    @PostMapping("/{groupId}/join")
+    public ResponseEntity<GroupDTO> joinGroup(@PathVariable Long groupId) {
+        GroupDTO joinedGroup = groupService.joinGroup(groupId);
+        return new ResponseEntity<>(joinedGroup, HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<GroupDTO>> getUserGroups() {
+        List<GroupDTO> userGroups = groupService.getUserGroups();
+        return new ResponseEntity<>(userGroups, HttpStatus.OK);
+    }
 }

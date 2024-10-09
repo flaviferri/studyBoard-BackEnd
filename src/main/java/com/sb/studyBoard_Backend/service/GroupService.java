@@ -23,40 +23,82 @@ public class GroupService implements IGroupService {
     private RoleService roleService;
     private UserGroupRoleService userGroupRoleService;
 
-   @Transactional 
+    @Transactional
     public GroupDTO createGroup(Group group) {
-       String username = authService.getAuthenticatedUsername();
-       UserEntity user = userService.findByUsername(username)
-               .orElseThrow(() -> new RuntimeException("User not found"));
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-       group.setCreatedBy(user);
+        group.setCreatedBy(user);
 
-       if (group.getBoards() != null) {
-           for (Board board : group.getBoards()) {
-               board.setGroup(group);
-               board.setCreatedBy(user);
-           }
-       }
-       Group createdGroup = groupRepository.save(group);/**/
-       RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
-               .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 
-       boolean hasRoleCreated = user.getRoles().stream()
-               .anyMatch(role -> role.getRoleEnum() == RoleEnum.CREATED);
+        if (group.getBoards() != null) {
+            for (Board board : group.getBoards()) {
+                board.setGroup(group);
+                board.setCreatedBy(user);
+            }
+        }
+        Group createdGroup = groupRepository.save(group);/**/
+        RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
+                .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 
-       if (!hasRoleCreated) {
-           user.getRoles().add(createdRole);
-           userGroupRoleService.saveUser(user);
-       } else {
-           System.out.println("El usuario ya tiene el rol CREATED.");
-       }
+        boolean hasRoleCreated = user.getRoles().stream()
+                .anyMatch(role -> role.getRoleEnum() == RoleEnum.CREATED);
 
-       UserGroupRole userGroupRole = new UserGroupRole();
-       userGroupRole.setUser(user);
-       userGroupRole.setGroup(createdGroup);
-       userGroupRole.setRole(createdRole);
-       userGroupRoleService.save(userGroupRole);
-       return convertToDTO(createdGroup, user);
+        if (!hasRoleCreated) {
+            user.getRoles().add(createdRole);
+            userGroupRoleService.saveUser(user);
+        } else {
+            System.out.println("El usuario ya tiene el rol CREATED.");
+        }
+
+        UserGroupRole userGroupRole = new UserGroupRole();
+        userGroupRole.setUser(user);
+        userGroupRole.setGroup(createdGroup);
+        userGroupRole.setRole(createdRole);
+        userGroupRoleService.save(userGroupRole);
+        return convertToDTO(createdGroup, user);
+    }
+
+    @Transactional
+    public GroupDTO joinGroup(Long groupId) {
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        // Comprobar si el usuario ya es parte del grupo
+        boolean alreadyMember = user.getUserGroupRoles().stream()
+                .anyMatch(ugr -> ugr.getGroup().getId().equals(groupId));
+
+        if (alreadyMember) {
+            throw new RuntimeException("User already a member of this group");
+        }
+
+        // Obtener el rol de usuario por defecto
+        RoleEntity userRole = roleService.findByRoleEnum(RoleEnum.USER)
+                .orElseThrow(() -> new RuntimeException("User role not found"));
+
+        // Crear y guardar la relación UserGroupRole
+        UserGroupRole userGroupRole = new UserGroupRole();
+        userGroupRole.setUser(user);
+        userGroupRole.setGroup(group);
+        userGroupRole.setRole(userRole);
+        userGroupRoleService.save(userGroupRole);
+
+        return convertToDTO(group, user);
+    }
+
+
+    @Override
+    public List<Group> findByUserId(Long userId) {
+        return groupRepository.findByCreatedBy_Id(userId);
+    }
+    @Override
+    public List<Group> findByCreatedBy_Id(Long userId) {
+        return groupRepository.findByCreatedBy_Id(userId);
     }
 
     public List<GroupDTO> getAllGroups() {
@@ -64,6 +106,23 @@ public class GroupService implements IGroupService {
         UserEntity user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<Group> groups = groupRepository.findAll();
+        return groups.stream()
+                .map(group -> convertToDTO(group, user))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupDTO> getUserGroups() {
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Obtener los grupos a los que el usuario está unido
+        List<Group> groups = user.getUserGroupRoles().stream()
+                .map(UserGroupRole::getGroup)
+                .collect(Collectors.toList());
+
+        // Convertir los grupos a DTOs
         return groups.stream()
                 .map(group -> convertToDTO(group, user))
                 .collect(Collectors.toList());
@@ -105,4 +164,7 @@ public class GroupService implements IGroupService {
         return dto;
     }
 }
+
+
+
 
