@@ -38,7 +38,9 @@ public class GroupService implements IGroupService {
                 board.setCreatedBy(user);
             }
         }
-        Group createdGroup = groupRepository.save(group);/**/
+
+        Group createdGroup = groupRepository.save(group);
+
         RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
                 .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 
@@ -58,6 +60,37 @@ public class GroupService implements IGroupService {
         userGroupRole.setRole(createdRole);
         userGroupRoleService.save(userGroupRole);
         return convertToDTO(createdGroup, user);
+
+    }
+
+    @Transactional
+    public GroupDTO joinGroup(Long groupId) {
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found"));
+
+        boolean alreadyMember = user.getUserGroupRoles().stream()
+                .anyMatch(ugr -> ugr.getGroup().getId().equals(groupId));
+
+        if (alreadyMember) {
+            throw new RuntimeException("User already a member of this group");
+        }
+
+        RoleEntity userRole = roleService.findByRoleEnum(RoleEnum.USER)
+                .orElseThrow(() -> new RuntimeException("User role not found"));
+
+        UserGroupRole userGroupRole = new UserGroupRole();
+        userGroupRole.setUser(user);
+        userGroupRole.setGroup(group);
+        userGroupRole.setRole(userRole);
+        userGroupRoleService.save(userGroupRole);
+
+        return convertToDTO(group, user);
+
+
     }
 
     public List<GroupDTO> getAllGroups() {
@@ -65,6 +98,21 @@ public class GroupService implements IGroupService {
         UserEntity user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<Group> groups = groupRepository.findAll();
+        return groups.stream()
+                .map(group -> convertToDTO(group, user))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupDTO> getUserGroups() {
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Group> groups = user.getUserGroupRoles().stream()
+                .map(UserGroupRole::getGroup)
+                .collect(Collectors.toList());
+
         return groups.stream()
                 .map(group -> convertToDTO(group, user))
                 .collect(Collectors.toList());
@@ -107,3 +155,4 @@ public class GroupService implements IGroupService {
         return dto;
     }
 }
+
