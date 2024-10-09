@@ -31,14 +31,13 @@ public class GroupService implements IGroupService {
 
         group.setCreatedBy(user);
 
-
         if (group.getBoards() != null) {
             for (Board board : group.getBoards()) {
                 board.setGroup(group);
                 board.setCreatedBy(user);
             }
         }
-        Group createdGroup = groupRepository.save(group);/**/
+        Group createdGroup = groupRepository.save(group);
         RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
                 .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 
@@ -140,6 +139,7 @@ public class GroupService implements IGroupService {
                     BoardDTO boardDTO = new BoardDTO();
                     boardDTO.setTitle(board.getTitle());
                     boardDTO.setColor(board.getColor());
+                    boardDTO.setId(board.getId());
                     return boardDTO;
                 })
                 .collect(Collectors.toSet()));

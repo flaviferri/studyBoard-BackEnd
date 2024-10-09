@@ -12,4 +12,5 @@ import lombok.Setter;
 public class BoardDTO {
     private String title;
     private String color;
+    private Long id;
 }
