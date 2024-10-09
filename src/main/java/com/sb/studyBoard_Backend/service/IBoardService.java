@@ -7,6 +7,5 @@ import java.util.Set;
 
 public interface IBoardService {
     Set<Board> getAllBoards(Long groupId);
-
     ResponseEntity<Object> addBoard(Board board, Long groupId);
 }
