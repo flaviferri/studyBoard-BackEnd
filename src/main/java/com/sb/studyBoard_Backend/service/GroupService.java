@@ -69,7 +69,6 @@ public class GroupService implements IGroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
 
-        // Comprobar si el usuario ya es parte del grupo
         boolean alreadyMember = user.getUserGroupRoles().stream()
                 .anyMatch(ugr -> ugr.getGroup().getId().equals(groupId));
 
@@ -77,11 +76,9 @@ public class GroupService implements IGroupService {
             throw new RuntimeException("User already a member of this group");
         }
 
-        // Obtener el rol de usuario por defecto
         RoleEntity userRole = roleService.findByRoleEnum(RoleEnum.USER)
                 .orElseThrow(() -> new RuntimeException("User role not found"));
 
-        // Crear y guardar la relación UserGroupRole
         UserGroupRole userGroupRole = new UserGroupRole();
         userGroupRole.setUser(user);
         userGroupRole.setGroup(group);
@@ -117,12 +114,10 @@ public class GroupService implements IGroupService {
         UserEntity user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Obtener los grupos a los que el usuario está unido
         List<Group> groups = user.getUserGroupRoles().stream()
                 .map(UserGroupRole::getGroup)
                 .collect(Collectors.toList());
 
-        // Convertir los grupos a DTOs
         return groups.stream()
                 .map(group -> convertToDTO(group, user))
                 .collect(Collectors.toList());
