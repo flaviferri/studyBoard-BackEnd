@@ -13,4 +13,5 @@ public class BoardDTO {
     private Long id;
     private String title;
     private String color;
+    private Long id;
 }
