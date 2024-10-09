@@ -94,6 +94,7 @@ public class GroupService implements IGroupService {
         dto.setBoards(group.getBoards().stream()
                 .map(board -> {
                     BoardDTO boardDTO = new BoardDTO();
+                    boardDTO.setId(board.getId());
                     boardDTO.setTitle(board.getTitle());
                     boardDTO.setColor(board.getColor());
                     return boardDTO;

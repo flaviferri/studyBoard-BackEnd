@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardDTO {
+    private Long id;
     private String title;
     private String color;
 }
