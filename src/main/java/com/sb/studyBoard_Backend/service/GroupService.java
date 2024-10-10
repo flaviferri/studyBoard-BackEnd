@@ -34,8 +34,7 @@ public class GroupService implements IGroupService {
 
                 if (group.getBoards() != null) {
                         for (Board board : group.getBoards()) {
-                                board.setGroup(group);
-                                board.setCreatedBy(user);
+                                BoardService.addInstructionsPostIt(board,user,group, postItService);
                         }
                 }
 
