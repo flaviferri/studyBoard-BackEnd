@@ -3,7 +3,6 @@ package com.sb.studyBoard_Backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -33,6 +33,9 @@ public class Postit extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private LocalDate date;
+  
     @Column(columnDefinition = "TEXT")
     private String textContent;
 
