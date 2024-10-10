@@ -45,6 +45,10 @@ public class PostItService implements IPostitService {
         postit.setBoard(board);
         postit.setCreatedBy(user);
 
+        if(postit.getDate() == null) {
+            postit.setDate(LocalDate.now());
+        }
+
         return postitRepository.save(postit);
     }
 
@@ -91,7 +95,7 @@ public class PostItService implements IPostitService {
         }
 
         if (postIts.isEmpty()) {
-            throw new NoPostItsOnSelectedDate("No hay Post-Its para la fecha seleccionada.");
+            throw new NoPostItsOnSelectedDate("No hay Post-its para la fecha seleccionada.");
         }
 
         return new ResponseEntity<>(postIts, HttpStatus.OK);
