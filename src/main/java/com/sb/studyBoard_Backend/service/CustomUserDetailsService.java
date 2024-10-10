@@ -2,9 +2,7 @@ package com.sb.studyBoard_Backend.service;
 
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.UserRepository;
-
 import lombok.AllArgsConstructor;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

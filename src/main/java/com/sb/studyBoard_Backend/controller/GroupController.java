@@ -1,15 +1,15 @@
 package com.sb.studyBoard_Backend.controller;
 
-import java.util.List;
-import java.util.Optional;
-import com.sb.studyBoard_Backend.dto.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.sb.studyBoard_Backend.dto.GroupDTO;
 import com.sb.studyBoard_Backend.model.Group;
 import com.sb.studyBoard_Backend.service.GroupService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController

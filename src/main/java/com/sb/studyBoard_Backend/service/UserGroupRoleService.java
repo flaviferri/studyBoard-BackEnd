@@ -2,11 +2,10 @@ package com.sb.studyBoard_Backend.service;
 
 import com.sb.studyBoard_Backend.interfaces.IUserGroupRoleService;
 import com.sb.studyBoard_Backend.model.UserEntity;
-import com.sb.studyBoard_Backend.repository.UserRepository;
-import org.springframework.stereotype.Service;
-
 import com.sb.studyBoard_Backend.model.UserGroupRole;
 import com.sb.studyBoard_Backend.repository.UserGroupRoleRepository;
+import com.sb.studyBoard_Backend.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 
 @Service
