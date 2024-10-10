@@ -95,14 +95,20 @@ public class PostItService implements IPostitService {
     }
 
     @Override
-    public ResponseEntity<List<Postit>> getPostItsByDate(Long groupId, LocalDate date) {
-        List<Postit> postIts = new ArrayList<>();
+    public ResponseEntity<List<PostitDTO>> getPostItsByDate(Long groupId, LocalDate date) {
+        List<PostitDTO> postIts = new ArrayList<>();
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new GroupNotFoundException("No se encontró el grupo."));
         Set<Board> boards = group.getBoards();
         for (Board board : boards) {
             List<Postit> boardPostIts = postitRepository.findByBoardAndDate(board, date);
-            postIts.addAll(boardPostIts);
+            for (Postit postit : boardPostIts) {
+                PostitDTO convertPostitDTO = convertToDTO(postit, user);
+                postIts.add(convertPostitDTO);
+            }
         }
 
         if (postIts.isEmpty()) {

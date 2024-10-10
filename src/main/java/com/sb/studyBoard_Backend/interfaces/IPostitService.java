@@ -16,5 +16,5 @@ public interface IPostitService {
 
     void deletePostit(Long id, Long userId) throws AccessDeniedException;
 
-    ResponseEntity<List<Postit>> getPostItsByDate(Long groupId, LocalDate date);
+    ResponseEntity<List<PostitDTO>> getPostItsByDate(Long groupId, LocalDate date);
 }
