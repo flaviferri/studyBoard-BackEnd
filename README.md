@@ -136,6 +136,7 @@ La estructura actual del back es la siguiente:
 │   │    │     ├── BoardDTO
 │   │    │     ├── CreatedByDTO
 │   │    │     ├── GroupDTO
+│   │    │     ├── PostitDTO
 │   │    │     └── RegisterRequest
 │   │    ├── exceptions
 │   │    │      ├── BoardNotFoundException
