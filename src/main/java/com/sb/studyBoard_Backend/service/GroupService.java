@@ -1,18 +1,20 @@
 
 package com.sb.studyBoard_Backend.service;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.sb.studyBoard_Backend.dto.*;
+import com.sb.studyBoard_Backend.dto.BoardDTO;
+import com.sb.studyBoard_Backend.dto.CreatedByDTO;
+import com.sb.studyBoard_Backend.dto.GroupDTO;
 import com.sb.studyBoard_Backend.interfaces.IGroupService;
 import com.sb.studyBoard_Backend.model.*;
-import org.springframework.stereotype.Service;
-
 import com.sb.studyBoard_Backend.repository.GroupRepository;
-
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -37,9 +39,7 @@ public class GroupService implements IGroupService {
                 BoardService.addInstructionsPostIt(board, user, group, postItService);
             }
         }
-
         Group createdGroup = groupRepository.save(group);
-
         RoleEntity createdRole = roleService.findByRoleEnum(RoleEnum.CREATED)
                 .orElseThrow(() -> new RuntimeException("CREATED role not found"));
 

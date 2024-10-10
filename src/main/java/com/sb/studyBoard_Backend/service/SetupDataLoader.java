@@ -1,24 +1,22 @@
 package com.sb.studyBoard_Backend.service;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-import com.sb.studyBoard_Backend.model.RoleEnum;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-
 import com.sb.studyBoard_Backend.model.PermissionEntity;
 import com.sb.studyBoard_Backend.model.RoleEntity;
+import com.sb.studyBoard_Backend.model.RoleEnum;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.PermissionRepository;
 import com.sb.studyBoard_Backend.repository.RoleRepository;
 import com.sb.studyBoard_Backend.repository.UserRepository;
-
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.lang.NonNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {

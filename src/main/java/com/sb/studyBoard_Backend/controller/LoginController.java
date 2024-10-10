@@ -1,9 +1,8 @@
 package com.sb.studyBoard_Backend.controller;
 
-import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.config.jwt.JwtService;
+import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.service.UserService;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;

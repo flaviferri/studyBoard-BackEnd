@@ -2,13 +2,11 @@ package com.sb.studyBoard_Backend.service;
 
 import com.sb.studyBoard_Backend.interfaces.IUserService;
 import com.sb.studyBoard_Backend.model.RoleEntity;
-import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.model.RoleEnum;
+import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.RoleRepository;
 import com.sb.studyBoard_Backend.repository.UserRepository;
-
 import lombok.AllArgsConstructor;
-
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 

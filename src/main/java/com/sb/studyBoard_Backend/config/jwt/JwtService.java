@@ -1,13 +1,11 @@
 package com.sb.studyBoard_Backend.config.jwt;
 
 import com.sb.studyBoard_Backend.model.UserEntity;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 

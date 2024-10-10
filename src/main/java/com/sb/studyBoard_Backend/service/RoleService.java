@@ -1,16 +1,12 @@
 package com.sb.studyBoard_Backend.service;
 
-import java.util.Optional;
-
+import com.sb.studyBoard_Backend.model.RoleEntity;
+import com.sb.studyBoard_Backend.model.RoleEnum;
+import com.sb.studyBoard_Backend.repository.RoleRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.nimbusds.oauth2.sdk.Role;
-import com.sb.studyBoard_Backend.model.Group;
-import com.sb.studyBoard_Backend.model.RoleEnum;
-import com.sb.studyBoard_Backend.model.RoleEntity;
-import com.sb.studyBoard_Backend.repository.RoleRepository;
-
-import lombok.AllArgsConstructor;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service

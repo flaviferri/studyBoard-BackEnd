@@ -1,6 +1,7 @@
 package com.sb.studyBoard_Backend.exceptions;
 
 import lombok.Data;
+
 import java.util.Date;
 
 @Data
