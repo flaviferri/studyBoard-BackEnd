@@ -14,4 +14,5 @@ public class GroupDTO {
     private CreatedByDTO createdBy;
     private Set<BoardDTO> boards;
     private Boolean isCreator;
+    private Boolean isMember;
 }
