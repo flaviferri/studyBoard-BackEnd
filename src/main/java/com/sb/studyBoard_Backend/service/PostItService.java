@@ -118,6 +118,22 @@ public class PostItService implements IPostitService {
         return new ResponseEntity<>(postIts, HttpStatus.OK);
     }
 
+    @Override
+    public Postit createInstructionsPostIt(Board board) {
+        String newLine = System.lineSeparator();
+        String defaultPostitText = "Para crear un post-it debes pulsar el botón '+' que tienes dentro de cada board y elegir un color." +
+                newLine +  newLine +
+                "Para crear un snippet de código tendrás que introducir **2 backticks (`) delante de tu snippet y otros 2 al final**"+
+                " para que aparezca así: " +newLine + newLine + "``console.log(\"¡Hola Mundo!\")``";
+        Postit defaultPostit = new Postit();
+        defaultPostit.setTextContent(defaultPostitText);
+        defaultPostit.setTitle("¿Cómo crear un Post-it?");
+        defaultPostit.setBoard(board);
+        defaultPostit.setColor("green");
+        defaultPostit.setDate(LocalDate.of(1980, 1, 1));
+        return defaultPostit;
+    }
+  
     public PostitDTO convertToDTO(Postit postit, UserEntity authenticatedUser) {
         PostitDTO postitDTO = new PostitDTO();
         postitDTO.setId(postit.getId());

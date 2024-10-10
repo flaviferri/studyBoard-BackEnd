@@ -5,6 +5,7 @@ import com.sb.studyBoard_Backend.exceptions.GroupHasNoBoards;
 import com.sb.studyBoard_Backend.interfaces.IBoardService;
 import com.sb.studyBoard_Backend.model.Board;
 import com.sb.studyBoard_Backend.model.Group;
+import com.sb.studyBoard_Backend.model.Postit;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.repository.BoardRepository;
 
@@ -15,6 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,25 +29,15 @@ public class BoardService implements IBoardService {
     private final GroupService groupService;
     private final UserService userService;
     private final AuthService authService;
+    private final PostItService postItService;
 
     public Set<Board> getAllBoards(Long groupId) {
         Group group = groupService.getGroupById(groupId).orElseThrow(() ->
                 new GroupNotFoundException("El grupo no existe."));
-        String username = authService.getAuthenticatedUsername();
-        UserEntity user = userService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-
-        /*   Esto descomentar si al final solo los miembros pueden ver el grupo
-        if (!user.getGroups().contains(group)) {
-            throw new AccessDeniedException("No tienes permiso para acceder a este grupo");
-        }*/
-
         Set<Board> boards = group.getBoards();
-
         if (boards.isEmpty()) {
             throw new GroupHasNoBoards("El grupo no tiene ningún board.");
         }
-
         return boards;
     }
 
@@ -58,10 +50,18 @@ public class BoardService implements IBoardService {
         if (!Objects.equals(group.getCreatedBy().getId(), user.getId())) {
             throw new AccessDeniedException("No tienes permiso para agregar un board en este grupo");
         }
-
-        board.setGroup(group);
-        board.setCreatedBy(user);
+        addInstructionsPostIt(board, user, group, postItService);
         boardRepository.save(board);
         return new ResponseEntity<>(board, HttpStatus.CREATED);
+    }
+
+    public static void addInstructionsPostIt(Board board, UserEntity user, Group group, PostItService postItService) {
+        board.setGroup(group);
+        board.setCreatedBy(user);
+        Postit defaultPostit = postItService.createInstructionsPostIt(board);
+        defaultPostit.setCreatedBy(user);
+        Set<Postit> postits = new HashSet<>();
+        postits.add(defaultPostit);
+        board.setPostits(postits);
     }
 }
