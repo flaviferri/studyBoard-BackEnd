@@ -1,9 +1,7 @@
 
 package com.sb.studyBoard_Backend.service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.sb.studyBoard_Backend.dto.*;
@@ -23,6 +21,7 @@ public class GroupService implements IGroupService {
     private AuthService authService;
     private UserService userService;
     private RoleService roleService;
+    private PostItService postItService;
     private UserGroupRoleService userGroupRoleService;
 
     @Transactional
@@ -35,8 +34,7 @@ public class GroupService implements IGroupService {
 
         if (group.getBoards() != null) {
             for (Board board : group.getBoards()) {
-                board.setGroup(group);
-                board.setCreatedBy(user);
+                BoardService.addInstructionsPostIt(board, user, group, postItService);
             }
         }
 

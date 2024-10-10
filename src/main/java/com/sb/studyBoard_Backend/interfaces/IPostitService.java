@@ -1,5 +1,6 @@
 package com.sb.studyBoard_Backend.interfaces;
 
+import com.sb.studyBoard_Backend.model.Board;
 import com.sb.studyBoard_Backend.model.Postit;
 import org.springframework.http.ResponseEntity;
 
@@ -16,6 +17,8 @@ public interface IPostitService {
     void deletePostit(Long id, Long userId) throws AccessDeniedException;
 
     ResponseEntity<List<Postit>> getPostItsByDate(Long groupId, LocalDate date);
+
+    Postit createInstructionsPostIt(Board board);
 }
 
 
