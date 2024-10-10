@@ -1,21 +1,21 @@
 package com.sb.studyBoard_Backend.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupDTO {
+public class PostitDTO {
     private Long id;
-    private String groupName;
-    private CreatedByDTO createdBy;
-    private Set<BoardDTO> boards;
-    private Boolean isCreator;
-    private Boolean isMember;
+    private String color;
+    private String title;
+    private LocalDate date;
+    private String textContent;
+    private Boolean isOwner;
 }
