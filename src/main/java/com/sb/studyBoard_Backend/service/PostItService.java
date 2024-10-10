@@ -1,5 +1,6 @@
 package com.sb.studyBoard_Backend.service;
 
+import com.sb.studyBoard_Backend.dto.PostitDTO;
 import com.sb.studyBoard_Backend.exceptions.BoardNotFoundException;
 import com.sb.studyBoard_Backend.exceptions.GroupNotFoundException;
 import com.sb.studyBoard_Backend.exceptions.NoPostItsOnSelectedDate;
@@ -16,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,13 +40,12 @@ public class PostItService implements IPostitService {
         UserEntity user = userService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Buscar el board por su ID
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("El board no existe."));
         postit.setBoard(board);
         postit.setCreatedBy(user);
 
-        if(postit.getDate() == null) {
+        if (postit.getDate() == null) {
             postit.setDate(LocalDate.now());
         }
 
@@ -53,8 +53,17 @@ public class PostItService implements IPostitService {
     }
 
     @Override
-    public List<Postit> getAllPostitsByBoardId(Long boardId) {
-        return postitRepository.findAllByBoardId(boardId);
+    public List<PostitDTO> getAllPostitsByBoardId(Long boardId) {
+
+        String authenticatedUsername = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(authenticatedUsername)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Postit> postits = postitRepository.findAllByBoardId(boardId);
+
+        return postits.stream()
+                .map(postit -> convertToDTO(postit, user))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -67,13 +76,15 @@ public class PostItService implements IPostitService {
                 .orElseThrow(() -> new RuntimeException("Postit not found"));
 
         if (!postit.getCreatedBy().getId().equals(userId)) {
-            throw new org.springframework.security.access.AccessDeniedException("No puedes eliminar un post-it que no has creado.");
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "No puedes eliminar un post-it que no has creado.");
         }
 
         if (hasPermission(user, "DELETE_POSTIT")) {
             postitRepository.delete(postit);
         } else {
-            throw new org.springframework.security.access.AccessDeniedException("No tienes permiso para eliminar post-its.");
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "No tienes permiso para eliminar post-its.");
         }
     }
 
@@ -84,14 +95,20 @@ public class PostItService implements IPostitService {
     }
 
     @Override
-    public ResponseEntity<List<Postit>> getPostItsByDate(Long groupId, LocalDate date) {
-        List<Postit> postIts = new ArrayList<>();
+    public ResponseEntity<List<PostitDTO>> getPostItsByDate(Long groupId, LocalDate date) {
+        List<PostitDTO> postIts = new ArrayList<>();
+        String username = authService.getAuthenticatedUsername();
+        UserEntity user = userService.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new GroupNotFoundException("No se encontró el grupo."));
         Set<Board> boards = group.getBoards();
         for (Board board : boards) {
             List<Postit> boardPostIts = postitRepository.findByBoardAndDate(board, date);
-            postIts.addAll(boardPostIts);
+            for (Postit postit : boardPostIts) {
+                PostitDTO convertPostitDTO = convertToDTO(postit, user);
+                postIts.add(convertPostitDTO);
+            }
         }
 
         if (postIts.isEmpty()) {
@@ -99,5 +116,19 @@ public class PostItService implements IPostitService {
         }
 
         return new ResponseEntity<>(postIts, HttpStatus.OK);
+    }
+
+    public PostitDTO convertToDTO(Postit postit, UserEntity authenticatedUser) {
+        PostitDTO postitDTO = new PostitDTO();
+        postitDTO.setId(postit.getId());
+        postitDTO.setColor(postit.getColor());
+        postitDTO.setTitle(postit.getTitle());
+        postitDTO.setDate(postit.getDate());
+        postitDTO.setTextContent(postit.getTextContent());
+
+        Boolean isOwner = postit.getCreatedBy().getId().equals(authenticatedUser.getId());
+        postitDTO.setIsOwner(isOwner);
+
+        return postitDTO;
     }
 }
