@@ -34,7 +34,7 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
 
-    @PostMapping("/{groupId}/join")
+    @PostMapping("/join/{groupId}")
     public ResponseEntity<GroupDTO> joinGroup(@PathVariable Long groupId) {
         GroupDTO joinedGroup = groupService.joinGroup(groupId);
         return new ResponseEntity<>(joinedGroup, HttpStatus.OK);

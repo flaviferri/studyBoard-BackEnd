@@ -2,6 +2,7 @@ package com.sb.studyBoard_Backend.service;
 
 import com.sb.studyBoard_Backend.exceptions.GroupNotFoundException;
 import com.sb.studyBoard_Backend.exceptions.GroupHasNoBoards;
+import com.sb.studyBoard_Backend.interfaces.IBoardService;
 import com.sb.studyBoard_Backend.model.Board;
 import com.sb.studyBoard_Backend.model.Group;
 import com.sb.studyBoard_Backend.model.UserEntity;

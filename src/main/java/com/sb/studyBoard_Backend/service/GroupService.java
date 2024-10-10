@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.sb.studyBoard_Backend.dto.*;
+import com.sb.studyBoard_Backend.interfaces.IGroupService;
 import com.sb.studyBoard_Backend.model.*;
 import org.springframework.stereotype.Service;
 

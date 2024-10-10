@@ -1,5 +1,6 @@
 package com.sb.studyBoard_Backend.service;
 
+import com.sb.studyBoard_Backend.interfaces.IUserService;
 import com.sb.studyBoard_Backend.model.RoleEntity;
 import com.sb.studyBoard_Backend.model.UserEntity;
 import com.sb.studyBoard_Backend.model.RoleEnum;

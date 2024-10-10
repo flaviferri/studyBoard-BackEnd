@@ -1,4 +1,4 @@
-package com.sb.studyBoard_Backend.service;
+package com.sb.studyBoard_Backend.interfaces;
 
 import com.sb.studyBoard_Backend.model.UserEntity;
 

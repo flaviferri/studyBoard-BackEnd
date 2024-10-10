@@ -1,10 +1,9 @@
-package com.sb.studyBoard_Backend.service;
+package com.sb.studyBoard_Backend.interfaces;
 
 
 import com.sb.studyBoard_Backend.dto.GroupDTO;
 import com.sb.studyBoard_Backend.model.Group;
 import com.sb.studyBoard_Backend.model.UserEntity;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
