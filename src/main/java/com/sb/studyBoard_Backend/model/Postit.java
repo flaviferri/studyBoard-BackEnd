@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @Table(name = "postits")
-public class Postit extends BaseEntity {
+public class Postit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

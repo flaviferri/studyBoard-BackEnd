@@ -72,7 +72,7 @@ public class PostItController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/date/{groupId}")
-    public ResponseEntity<List<Postit>> getAllPostitsByBoardId(@PathVariable Long groupId, @RequestParam LocalDate date) {
+    public ResponseEntity<List<Postit>> getAllPostitsByDate(@PathVariable Long groupId, @RequestParam LocalDate date) {
         return postitService.getPostItsByDate(groupId, date);
     }
 }
