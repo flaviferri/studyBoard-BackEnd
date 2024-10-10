@@ -1,15 +1,7 @@
-package com.sb.studyBoard_Backend.service;
+package com.sb.studyBoard_Backend.interfaces;
 
-import com.sb.studyBoard_Backend.exceptions.BoardNotFoundException;
-import com.sb.studyBoard_Backend.model.Board;
 import com.sb.studyBoard_Backend.model.Postit;
-import com.sb.studyBoard_Backend.model.UserEntity;
-import com.sb.studyBoard_Backend.repository.BoardRepository;
-import com.sb.studyBoard_Backend.repository.PostItRepository;
-import com.sb.studyBoard_Backend.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
