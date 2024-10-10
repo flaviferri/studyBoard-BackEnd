@@ -8,6 +8,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,16 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-
-    private final String SECRET_KEY = "HVkzZjNkzsm3jnkFAJh4KSDHsojq9k3m9jJcmDzokAs=";
-
+    @Value("${jwt.secret}")
+    private String secretKey;
+    private String SECRET_KEY;
+    @PostConstruct
+    public void init() {
+        this.SECRET_KEY = secretKey;
+    }
+    public String getSecretKey() {
+        return SECRET_KEY;
+    }
     private final long EXPIRATION_TIME = 86400000;
 
     public String generateToken(UserEntity user) {
