@@ -19,7 +19,6 @@ public class UserGroupRole extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    // @JsonBackReference
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private UserEntity user;

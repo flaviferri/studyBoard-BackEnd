@@ -46,7 +46,6 @@ public class AuthService {
             throw new RuntimeException("Default role not found!");
         }
 
-        // Crear y guardar el usuario
         UserEntity user = UserEntity.builder()
                 .name(accountDto.getName())
                 .email(accountDto.getEmail())
@@ -56,8 +55,6 @@ public class AuthService {
                 .build();
 
         UserEntity userCreated = userRepository.save(user);
-
-        // Generar token para el usuario creado
         String token = jwtService.generateToken(userCreated);
 
         return token;
@@ -69,7 +66,7 @@ public class AuthService {
 
     public String login(AuthRequest authRequest) throws Exception {
         try {
-            // Autenticación del usuario
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authRequest.getEmail(),
@@ -78,7 +75,6 @@ public class AuthService {
 
             UserEntity userEntity = (UserEntity) userDetails;
 
-            // Generar y devolver el token para el usuario autenticado
             return jwtService.generateToken(userEntity);
         } catch (BadCredentialsException e) {
             throw new Exception("Invalid credentials");
