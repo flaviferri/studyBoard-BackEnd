@@ -12,19 +12,19 @@ import org.springframework.stereotype.Service;
 public class UserGroupRoleService implements IUserGroupRoleService {
 
     private final UserGroupRoleRepository userGroupRoleRepository;
-    private final UserRepository userRepository; // Añade el repositorio de usuario
+    private final UserRepository userRepository;
 
     public UserGroupRoleService(UserGroupRoleRepository userGroupRoleRepository, UserRepository userRepository) {
         this.userGroupRoleRepository = userGroupRoleRepository;
-        this.userRepository = userRepository; // Inicializa el repositorio de usuario
+        this.userRepository = userRepository;
     }
 
     public UserGroupRole save(UserGroupRole userGroupRole) {
         return userGroupRoleRepository.save(userGroupRole);
     }
 
-    // Método para guardar o actualizar el usuario
+
     public void saveUser(UserEntity user) {
-        userRepository.save(user); // Guarda el usuario en la base de datos
+        userRepository.save(user);
     }
 }

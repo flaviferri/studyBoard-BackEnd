@@ -83,7 +83,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 readGroup,
                 createGroup));
 
-        // Crear usuario administrador si no existe
         if (!userRepository.findByEmail("testadmin@test.com").isPresent()) {
             UserEntity adminUser = UserEntity.builder()
                     .name("TestAdmin")
@@ -96,11 +95,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             userRepository.save(adminUser);
         }
 
-        // Marcar como completado
         alreadySetup = true;
     }
-
-    // Métodos de ayuda para crear permisos y roles si no existen
     @Transactional
     PermissionEntity createPermissionIfNotFound(String name) {
         return permissionRepository.findByName(name)

@@ -4,6 +4,7 @@ import com.sb.studyBoard_Backend.config.jwt.JwtService;
 import com.sb.studyBoard_Backend.dto.AuthRequest;
 import com.sb.studyBoard_Backend.dto.RegisterRequest;
 import com.sb.studyBoard_Backend.exceptions.EmailExistsException;
+import com.sb.studyBoard_Backend.interfaces.IAuthService;
 import com.sb.studyBoard_Backend.model.RoleEntity;
 import com.sb.studyBoard_Backend.model.RoleEnum;
 import com.sb.studyBoard_Backend.model.UserEntity;
@@ -24,7 +25,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class AuthService {
+public class AuthService implements IAuthService {
 
     private final AuthenticationManager authenticationManager;
 
@@ -46,7 +47,6 @@ public class AuthService {
             throw new RuntimeException("Default role not found!");
         }
 
-        // Crear y guardar el usuario
         UserEntity user = UserEntity.builder()
                 .name(accountDto.getName())
                 .email(accountDto.getEmail())
@@ -56,20 +56,18 @@ public class AuthService {
                 .build();
 
         UserEntity userCreated = userRepository.save(user);
-
-        // Generar token para el usuario creado
         String token = jwtService.generateToken(userCreated);
 
         return token;
     }
 
-    private boolean emailExist(String email) {
+    public boolean emailExist(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
 
     public String login(AuthRequest authRequest) throws Exception {
         try {
-            // Autenticación del usuario
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authRequest.getEmail(),
@@ -78,7 +76,6 @@ public class AuthService {
 
             UserEntity userEntity = (UserEntity) userDetails;
 
-            // Generar y devolver el token para el usuario autenticado
             return jwtService.generateToken(userEntity);
         } catch (BadCredentialsException e) {
             throw new Exception("Invalid credentials");
