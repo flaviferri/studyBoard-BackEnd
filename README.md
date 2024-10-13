@@ -245,4 +245,25 @@ Este proyecto ha sido desarrollado por una única coder:
 - [Eugenia Saravia](https://github.com/Euge-Saravia/)
 
 ## Demo
-
+<img width="859" alt="login_sb" src="https://github.com/user-attachments/assets/f7eac57e-fe18-414b-9942-508e39e83afc">
+<img width="865" alt="home_sb" src="https://github.com/user-attachments/assets/e57e04ef-f40a-4797-a835-6d1d9f4d3d53">
+<img width="864" alt="search_sb" src="https://github.com/user-attachments/assets/c8a2a11f-1388-44bf-b91f-97f4652a4ae1">
+<img width="864" alt="creargrupo_sb" src="https://github.com/user-attachments/assets/3b6e1bb3-0de2-4cc9-b481-6c9cf5592f1e">
+<img width="865" alt="aboutus_Sb" src="https://github.com/user-attachments/assets/6900403a-d8ea-4ace-ad40-d55f3a85f9fe">
+<img width="866" alt="userdesktop_sb" src="https://github.com/user-attachments/assets/d4382ec5-2530-484b-b06a-494d90a7d59d">
+<img width="863" alt="group_sb" src="https://github.com/user-attachments/assets/73c1fbb2-ffd1-4e1e-9adf-b18c1d2e523e">
+https://github.com/user-attachments/assets/6452e35c-9d80-46ac-855f-92b8cff8ae24
+<img width="867" alt="createdboard_sb" src="https://github.com/user-attachments/assets/78a1a917-3264-4d8c-ac16-7cded5c16686">
+<img width="867" alt="crearboard_sb" src="https://github.com/user-attachments/assets/804a26d3-66e1-4581-978f-9d99518853f9">
+<img width="869" alt="postitinicial_sb" src="https://github.com/user-attachments/assets/6eeaacbd-cd48-41a5-8b97-352a65cf0a76">
+<img width="310" alt="mobile1_sb" src="https://github.com/user-attachments/assets/3123c3c3-bcfb-421c-bff0-f794484e134b">
+<br>
+<img width="312" alt="mobile2_sb" src="https://github.com/user-attachments/assets/be7b6c85-5324-4a51-8021-71f4ed25856b">
+<br>
+<img width="308" alt="mobile3_sb" src="https://github.com/user-attachments/assets/664bddcb-1000-446d-bc7c-d6e1c47e0d1e">
+<br>
+<img width="308" alt="mobile4_Sb" src="https://github.com/user-attachments/assets/29eb136b-89fa-403e-a75b-9bc56174d4f7">
+<br>
+<img width="306" alt="mobile5_sb" src="https://github.com/user-attachments/assets/716c9cb7-efed-4173-aecb-0d28be76a384">
+<br>
+https://github.com/user-attachments/assets/a61083b5-539d-414e-9386-bd50fb407d7d
