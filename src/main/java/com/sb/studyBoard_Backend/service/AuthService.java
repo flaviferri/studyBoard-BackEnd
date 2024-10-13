@@ -4,6 +4,7 @@ import com.sb.studyBoard_Backend.config.jwt.JwtService;
 import com.sb.studyBoard_Backend.dto.AuthRequest;
 import com.sb.studyBoard_Backend.dto.RegisterRequest;
 import com.sb.studyBoard_Backend.exceptions.EmailExistsException;
+import com.sb.studyBoard_Backend.interfaces.IAuthService;
 import com.sb.studyBoard_Backend.model.RoleEntity;
 import com.sb.studyBoard_Backend.model.RoleEnum;
 import com.sb.studyBoard_Backend.model.UserEntity;
@@ -24,7 +25,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Service
-public class AuthService {
+public class AuthService implements IAuthService {
 
     private final AuthenticationManager authenticationManager;
 
@@ -60,7 +61,7 @@ public class AuthService {
         return token;
     }
 
-    private boolean emailExist(String email) {
+    public boolean emailExist(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
 
