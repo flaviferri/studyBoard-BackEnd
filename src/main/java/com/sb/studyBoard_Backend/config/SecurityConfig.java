@@ -49,7 +49,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(sessionManager ->
                         sessionManager
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sin sesión, usando JWT
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
